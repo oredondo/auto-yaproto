@@ -1,0 +1,11 @@
+---
+# tasks file for base
+- name: install nettools
+  yum:
+    name: net-tools
+    state: present
+- selinux:
+    state: disabled
+- name: Reboot a machine updates to apply
+  reboot:
+    reboot_timeout: 600

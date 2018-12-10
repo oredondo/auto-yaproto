@@ -17,32 +17,41 @@ Vagrant.configure("2") do |config|
     # config.vm.provider :virtualbox do |vb|
     # vb.gui = true
     # end
-  config.vm.provision "shell", inline: "echo Hello"
-  config.vm.define "nodo1" do |nodo1|
-    nodo1.vm.box = "centos/7"
-    nodo1.vm.network "private_network", ip: "192.168.0.4", virtualbox__intnet: true
+
+  config.vm.box = "centos/7"
+  config.vm.define "node1" do |node|
+    node.vm.network "private_network", ip: "192.168.1.4", virtualbox__intnet: true
   end
 
   config.vm.define "r0" do |router|
-    router.vm.box = "centos/7"
-    router.vm.network "private_network", ip: "192.168.0.1", virtualbox__intnet: true
+    router.vm.network "private_network", ip: "192.168.1.1", virtualbox__intnet: true
     router.vm.network "private_network", ip: "10.0.1.5", virtualbox__intnet: true
   end
   config.vm.define "r1" do |router|
-    router.vm.box = "centos/7"
-    router.vm.network "private_network", ip: "176.10.0.1", virtualbox__intnet: true
-    router.vm.network "private_network", ip: "10.0.1.5", virtualbox__intnet: true
-  end
-  config.vm.define "nodo2" do |nodo2|
-    nodo2.vm.box = "centos/7"
-    nodo2.vm.network "private_network", ip: "176.10.0.5", virtualbox__intnet: true
+    router.vm.network "private_network", ip: "176.10.1.1", virtualbox__intnet: true
+    router.vm.network "private_network", ip: "10.0.1.6", virtualbox__intnet: true
   end
 
+  config.vm.define "node2" do |node|
+    node.vm.network "private_network", ip: "176.10.1.5", virtualbox__intnet: true
+    node.vm.provision "ansible" do |ansible|
+      ansible.playbook       = "playbook.yml"
+      ansible.limit          = "all"
+      ansible.become = true
+      ansible.groups = {
+        "nodes" => [
+          "node1",
+          "node2"
+        ],
+        "router" => [
+          "r0",
+          "r1"
+        ]
+      }
 
-  config.vm.provision "ansible" do |ansible|
-    ansible.playbook = "playbook.yml"
-    ansible.become = true
+    end
   end
+
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
   # `vagrant box outdated`. This is not recommended.
