@@ -1,2 +1,5 @@
 */.vagrant/*
 *.retry
+*.pyc
+web-flask/.idea/*
+web-flask/venv/*
