@@ -1,152 +1,78 @@
 <!doctype html>
-<html lang="en">
-  <head>
+<html>
+<head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, shrink-to-fit=no, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="../statics/bootstrap-4.2.1-dist/favicon.ico">
 
-    <title>Dashboard Template for Bootstrap</title>
+    <title>Simple Sidebar - Start Bootstrap Template</title>
 
-    <!-- Bootstrap core CSS -->
-    <link href="../statics/bootstrap-4.2.1-dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Core CSS -->
+    <link href="../statics/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Custom styles for this template -->
-    <link href="../statics/css/dashboard.css" rel="stylesheet">
-  </head>
+    <!-- Custom CSS -->
+    <link href="../statics/css/simple-sidebar.css" rel="stylesheet">
+    <link href="../statics/css/style.css" rel="stylesheet">
+</head>
 
-  <body>
-    <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
-      <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Company name</a>
-      <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
-      <ul class="navbar-nav px-3">
-        <li class="nav-item text-nowrap">
-          <a class="nav-link" href="#">Sign out</a>
-        </li>
-      </ul>
-    </nav>
+<body>
+<div class="container-fluid">
+  <div class="row">
+        <div class="col-sm-2">
+                <div id="wrapper" class="container">
 
-    <div class="container-fluid">
-      <div class="row">
-        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
-          <div class="sidebar-sticky">
-            <ul class="nav flex-column">
-              <li class="nav-item">
-                <a class="nav-link active" href="#">
-                  <span data-feather="home"></span>
-                  Dashboard <span class="sr-only">(current)</span>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <span data-feather="file"></span>
-                  Orders
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <span data-feather="shopping-cart"></span>
-                  Products
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <span data-feather="users"></span>
-                  Customers
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <span data-feather="bar-chart-2"></span>
-                  Reports
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <span data-feather="layers"></span>
-                  Integrations
-                </a>
-              </li>
-            </ul>
+                    <!-- Sidebar -->
+                    <div id="sidebar-wrapper">
+                        <ul class="sidebar-nav">
+                            <li class="sidebar-brand">
+                                <a href="#">
+                                    Start Bootstrap
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">Dashboard</a>
+                            </li>
+                            <li>
+                                <a href="#">Shortcuts</a>
+                            </li>
+                            <li>
+                                <a href="#">Overview</a>
+                            </li>
+                            <li>
+                                <a href="#">Events</a>
+                            </li>
+                            <li>
+                                <a href="#">About</a>
+                            </li>
+                            <li>
+                                <a href="#">Services</a>
+                            </li>
+                            <li>
+                                <a href="#">Contact</a>
+                            </li>
+                        </ul>
+                    </div>
+            <!-- /#sidebar-wrapper -->
 
-            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-              <span>Saved reports</span>
-              <a class="d-flex align-items-center text-muted" href="#">
-                <span data-feather="plus-circle"></span>
-              </a>
-            </h6>
-            <ul class="nav flex-column mb-2">
-              <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <span data-feather="file-text"></span>
-                  Current month
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <span data-feather="file-text"></span>
-                  Last quarter
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <span data-feather="file-text"></span>
-                  Social engagement
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <span data-feather="file-text"></span>
-                  Year-end sale
-                </a>
-              </li>
-            </ul>
-          </div>
-        </nav>
+             </div>
+        </div>
+        <div class="col-sm-10">
 
-        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
-          <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-            <h1 class="h2">Dashboard</h1>
-            <div class="btn-toolbar mb-2 mb-md-0">
-              <div class="btn-group mr-2">
-                <button class="btn btn-sm btn-outline-secondary">Share</button>
-                <button class="btn btn-sm btn-outline-secondary">Export</button>
+              <div id="cy-container">
+                <div id="cy"></div>
               </div>
-              <button class="btn btn-sm btn-outline-secondary dropdown-toggle">
-                <span data-feather="calendar"></span>
-                This week
-              </button>
-            </div>
-          </div>
-<!-- js de cytoscape -->
-           <link href="../statics/css/style.css" rel="stylesheet" />
-
-            <script src="../statics/cytoscape/dist/cytoscape.min.js"></script>
-          <div class="my-4" id="cytoscape_custom" width="900" height="380">
-
-              <div id="cy"></div>
-              <!-- Load application code at the end to ensure DOM is loaded -->
-              <script src="../statics/js/code.js"></script>
-          </div>
-<!-- js de cytoscape end -->
-
-
-
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script>window.jQuery || document.write('<script src="../statics/bootstrap-4.2.1-dist/assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
-    <script src="../statics/bootstrap-4.2.1-dist/assets/js/vendor/popper.min.js"></script>
-    <script src="../statics/bootstrap-4.2.1-dist/js/bootstrap.min.js"></script>
-
-    <!-- Icons -->
-    <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
-    <script>
-      feather.replace()
-    </script>
-
-
-  </body>
+        </div>
+    </div>
+</div>
+        <!-- /#page-content-wrapper -->
+<script src="../statics/js/jquery.js"></script>
+<script src="../statics/js/bootstrap.min.js"></script>
+<script src="../statics/cytoscape/dist/cytoscape.min.js"></script>
+<script src='https://cdn.rawgit.com/cpettitt/dagre/v0.7.4/dist/dagre.min.js'></script>
+<script src='https://cdn.rawgit.com/cytoscape/cytoscape.js-dagre/1.1.2/cytoscape-dagre.js'></script>
+<script src="../statics/js/code.js"></script>
+</body>
+</html>
 </html>
