@@ -52,23 +52,21 @@ $(function() {
     style: [{
         selector: 'node',
         style: {
-          'width': 200,
-          'height': 200,
+          'width': 60,
+          'height': 60,
+          "shape": 'data(type)',
           'content': 'data(text)',
           //          'text-opacity': 0.5,
           'text-valign': 'center',
           'color': 'white',
-          'background-color': nodeOptions.normal.bgColor,
           'text-outline-width': 2,
           'text-outline-color': '#222'
         }
       },
-
       {
         selector: 'edge',
         style: {
-          'width': 10,
-          'target-arrow-shape': 'triangle',
+          'width': 5,
           'line-color': 'data(color)',
           'target-arrow-color': '#9dbaea'
         }
@@ -87,33 +85,37 @@ $(function() {
       {
         selector: 'edge:selected',
         style: {
-          'width': 20
+          'width': 10
         }
       }
     ],
 
     elements: {
-      //selectable: false, 
-      grabbable: false,
+      //selectable: false,
+      //grabbable: false,
       nodes: [{
         data: {
           id: '0',
-          text: 'abc'
+          text: 'router ',
+          type: 'rectangle'
         }
       }, {
         data: {
           id: '1',
-          text: 'def'
+          text: 'nodo1',
+          type:  "ellipse"
         }
       }, {
         data: {
           id: '2',
-          text: 'ghi'
+          text: 'nodo2',
+          type:  "ellipse"
         }
       }, {
         data: {
           id: '3',
-          text: 'jkl'
+          text: 'nodo3',
+          type:  "ellipse"
         }
       }], // nodes
       edges: [{
