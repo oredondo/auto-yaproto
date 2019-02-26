@@ -1,6 +1,27 @@
 /* cytoscape js selector demo
 moved to https://codepen.io/yeoupooh/pen/BjWvRa
  */
+
+
+
+function callStyle(theResponse) {
+    return $.ajax({
+            url : "/api/style", // the endpoint
+            type : "GET", // http method
+            dataType: "json",
+            // handle a non-successful response
+            success: function( data ) {
+                // Call this function on success
+                return data;
+            },
+            error : function() {
+               console.log("EROOR");
+            }
+      });
+}
+
+var style = callStyle();
+
 $(function() {
 
   var win = $(window);
@@ -32,6 +53,11 @@ $(function() {
     }
   };
 
+
+var toJson = function(res){ return res.json(); }
+
+
+
   var cy = window.cy = cytoscape({
     container: document.getElementById('cy'),
 
@@ -44,51 +70,11 @@ $(function() {
     //autounselectify: false,
     //selectionType: 'additive',
     //autoungrabify: true,
-
     layout: {
       name: 'dagre'
     },
 
-    style: [{
-        selector: 'node',
-        style: {
-          'width': 60,
-          'height': 60,
-          "shape": 'data(type)',
-          'content': 'data(text)',
-          //          'text-opacity': 0.5,
-          'text-valign': 'center',
-          'color': 'white',
-          'text-outline-width': 2,
-          'text-outline-color': '#222'
-        }
-      },
-      {
-        selector: 'edge',
-        style: {
-          'width': 5,
-          'line-color': 'data(color)',
-          'target-arrow-color': '#9dbaea'
-        }
-      },
-
-      {
-        selector: ':selected',
-        style: {
-          'background-color': 'yellow',
-          'line-color': 'yellow',
-          'target-arrow-color': 'black',
-          'source-arrow-color': 'black',
-        }
-      },
-
-      {
-        selector: 'edge:selected',
-        style: {
-          'width': 10
-        }
-      }
-    ],
+        style: style,
 
     elements: {
       //selectable: false,
@@ -120,25 +106,25 @@ $(function() {
       }], // nodes
       edges: [{
           data: {
-            color: '#f00',
+            color: '#000',
             source: '0',
             target: '1'
           }
         }, {
           data: {
-            color: '#f00',
+            color: '#000',
             source: '1',
             target: '2'
           }
         }, {
           data: {
-            color: '#f00',
+            color: '#000',
             source: '2',
             target: '3'
           }
         }, {
           data: {
-            color: '#f00',
+            color: '#000',
             source: '0',
             target: '2'
           }
@@ -150,7 +136,7 @@ $(function() {
           }
         }, {
           data: {
-            color: '#f00',
+            color: '#000',
             source: '0',
             target: '3'
           }

@@ -18,7 +18,6 @@ class Style(Resource):
           'height': 60,
           "shape": 'data(type)',
           'content': 'data(text)',
-
           'text-valign': 'center',
           'color': 'white',
           'text-outline-width': 2,
