@@ -22,6 +22,24 @@ function callStyle(theResponse) {
 
 var style = callStyle();
 
+function callElements(theResponse) {
+    return $.ajax({
+            url : "/api/elements", // the endpoint
+            type : "GET", // http method
+            dataType: "json",
+            // handle a non-successful response
+            success: function( data ) {
+                // Call this function on success
+                return data;
+            },
+            error : function() {
+               console.log("EROOR");
+            }
+      });
+}
+
+var elements = callElements();
+
 $(function() {
 
   var win = $(window);
@@ -73,75 +91,8 @@ var toJson = function(res){ return res.json(); }
     layout: {
       name: 'dagre'
     },
-
-        style: style,
-
-    elements: {
-      //selectable: false,
-      //grabbable: false,
-      nodes: [{
-        data: {
-          id: '0',
-          text: 'router ',
-          type: 'rectangle'
-        }
-      }, {
-        data: {
-          id: '1',
-          text: 'nodo1',
-          type:  "ellipse"
-        }
-      }, {
-        data: {
-          id: '2',
-          text: 'nodo2',
-          type:  "ellipse"
-        }
-      }, {
-        data: {
-          id: '3',
-          text: 'nodo3',
-          type:  "ellipse"
-        }
-      }], // nodes
-      edges: [{
-          data: {
-            color: '#000',
-            source: '0',
-            target: '1'
-          }
-        }, {
-          data: {
-            color: '#000',
-            source: '1',
-            target: '2'
-          }
-        }, {
-          data: {
-            color: '#000',
-            source: '2',
-            target: '3'
-          }
-        }, {
-          data: {
-            color: '#000',
-            source: '0',
-            target: '2'
-          }
-        }, {
-          data: {
-            color: '#000',
-            source: '0',
-            target: '3'
-          }
-        }, {
-          data: {
-            color: '#000',
-            source: '0',
-            target: '3'
-          }
-        }] // edges
-    } // elements
+    style: style,
+    elements: elements // elements
   }); // cytoscape
 
   var selectedNodeHandler = function(evt) {

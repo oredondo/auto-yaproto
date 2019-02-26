@@ -52,3 +52,74 @@ class Style(Resource):
     ]
 
 api.add_resource(Style, '/api/style')
+
+
+
+class Elements(Resource):
+    def get(self):
+        return { ##selectable: false,
+                    ##grabbable: false,
+                    "nodes": [{
+                      "data": {
+                        "id": "0",
+                        "text": 'router',
+                        "type": 'rectangle'
+                      }
+                    }, {
+                      "data": {
+                        "id": '1',
+                        "text": 'nodo1',
+                        "type":  "ellipse"
+                      }
+                    }, {
+                      "data": {
+                        "id": '2',
+                        "text": 'nodo2',
+                        "type":  "ellipse"
+                      }
+                    }, {
+                      "data": {
+                        "id": '3',
+                        "text": 'nodo3',
+                        "type":  "ellipse"
+                      }
+                    }], # nodes
+                    "edges": [{
+                        "data": {
+                          "color": '#000',
+                          "source": '0',
+                          "target": '1'
+                        }
+                      }, {
+                        "data": {
+                          "color": '#000',
+                          "source": '1',
+                          "target": '2'
+                        }
+                      }, {
+                        "data": {
+                          "color": '#000',
+                          "source": '2',
+                          "target": '3'
+                        }
+                      }, {
+                        "data": {
+                          "color": '#000',
+                          "source": '0',
+                          "target": '2'
+                        }
+                      }, {
+                        "data": {
+                          "color": '#000',
+                          "source": '0',
+                          "target": '3'
+                        }
+                      }, {
+                        "data": {
+                          "color": '#000',
+                          "source": '0',
+                          "target": '3'
+                        }
+                      }] ## edges
+                  }
+api.add_resource(Elements, '/api/elements')
