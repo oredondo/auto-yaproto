@@ -3,6 +3,15 @@ moved to https://codepen.io/yeoupooh/pen/BjWvRa
  */
 
 
+$('#1').click(function() {
+  if(!playing) {
+    audio1.play();
+    playing = true;
+  } else {
+    audio1.pause();
+    playing = false;
+});
+
 
 function callStyle(theResponse) {
     return $.ajax({
