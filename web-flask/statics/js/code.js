@@ -3,15 +3,6 @@ moved to https://codepen.io/yeoupooh/pen/BjWvRa
  */
 
 
-$('#1').click(function() {
-  if(!playing) {
-    audio1.play();
-    playing = true;
-  } else {
-    audio1.pause();
-    playing = false;
-});
-
 
 function callStyle(theResponse) {
     return $.ajax({
@@ -104,6 +95,8 @@ var toJson = function(res){ return res.json(); }
     elements: elements // elements
   }); // cytoscape
 
+
+
   var selectedNodeHandler = function(evt) {
     //console.log(evt.data); // 'bar'
 
@@ -172,6 +165,17 @@ var toJson = function(res){ return res.json(); }
     });
   }
 
+//var edges_vpc = [{ group: 'nodes',
+//                data: {
+//                    id: '3',
+//                    parent: 'b',
+//                    text: 'nodo3',
+//                    type: "ellipse",
+//                    color: "grey"
+//                }
+//            }];
+//cy.add(edges_vpc);
+
   $("#fit").click(function() {
     console.log('cy=', cy);
     cy.fit();
@@ -183,5 +187,7 @@ var toJson = function(res){ return res.json(); }
       name: 'dagre'
     });
   });
+
+
 
 }); // ready
