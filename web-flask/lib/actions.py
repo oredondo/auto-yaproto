@@ -43,7 +43,6 @@ class Style(object):
     def get(self):
         return self.style
 
-
 class Elements(object):
 
     def __init__(self):
@@ -59,6 +58,7 @@ class Elements(object):
                 "data": {
                     "id": '1',
                     "text": 'nodo1',
+                    "parent": 'a',
                     "type": "ellipse",
                     "color": "grey"
                 }
@@ -83,6 +83,14 @@ class Elements(object):
                     "data": {
                         "id": 'b',
                         "text": 'net0',
+                        "type": "rectangle",
+                        "color": "#D7D7D7"
+                    }
+                },
+                {
+                    "data": {
+                        "id": 'a',
+                        "text": 'net1',
                         "type": "rectangle",
                         "color": "#D7D7D7"
                     }
@@ -111,3 +119,18 @@ class Elements(object):
 
     def get(self):
         return self.element
+
+
+class AddNode(object):
+    def __init__(self):
+        pass
+
+    def get(self):
+        pass
+
+    def put(self, data):
+        for item in data.get("elements").get("nodes"):
+            if item.get("data").get("type") == "ellipse":
+                id = item.get("data").get("id")
+        id = int(id)
+        return {"group": 'nodes', "data": {"id": str(id+1), "text": 'nodo'+str(id+1), "type": "ellipse", "color": "grey"}}

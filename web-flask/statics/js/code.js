@@ -40,6 +40,8 @@ function callElements(theResponse) {
 
 var elements = callElements();
 
+
+
 $(function() {
 
   var win = $(window);
@@ -70,9 +72,6 @@ $(function() {
       lineColor: 'yellow'
     }
   };
-
-
-var toJson = function(res){ return res.json(); }
 
 
 
@@ -165,16 +164,30 @@ var toJson = function(res){ return res.json(); }
     });
   }
 
-//var edges_vpc = [{ group: 'nodes',
-//                data: {
-//                    id: '3',
-//                    parent: 'b',
-//                    text: 'nodo3',
-//                    type: "ellipse",
-//                    color: "grey"
-//                }
-//            }];
-//cy.add(edges_vpc);
+
+$(document).ready(function() {
+  $("#addNode").click(function() {
+    $.ajax({
+            url : "/api/addnode", // the endpoint
+            type : "PUT", // http method
+            data: JSON.stringify(cy.json()),
+            contentType: "application/json",
+            dataType: 'json',
+            // handle a non-successful response
+            success: function( data ) {
+                // Call this function on success
+                cy.add(data);
+                return data;
+            },
+            error : function() {
+               console.log("EROOR");
+               console.log(theResponse)
+            }
+      });
+  });
+});
+
+
 
   $("#fit").click(function() {
     console.log('cy=', cy);
