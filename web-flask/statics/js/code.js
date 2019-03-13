@@ -167,10 +167,16 @@ $(function() {
 
 $(document).ready(function() {
   $("#addNode").click(function() {
+    var name = $('#name').val();
+    var net = $('#net').val();
+    var dict = cy.json();
+    dict["name"] = name;
+    dict["net"] = net;
+    console.log(dict);
     $.ajax({
-            url : "/api/addnode", // the endpoint
+            url : "/api/node", // the endpoint
             type : "PUT", // http method
-            data: JSON.stringify(cy.json()),
+            data: JSON.stringify(dict),
             contentType: "application/json",
             dataType: 'json',
             // handle a non-successful response
@@ -181,12 +187,34 @@ $(document).ready(function() {
             },
             error : function() {
                console.log("EROOR");
-               console.log(theResponse)
+               console.log(data)
             }
       });
   });
 });
 
+$(document).ready(function() {
+  $("#deleteNode").click(function() {
+    $.ajax({
+            url : "/api/node", // the endpoint
+            type : "DELETE", // http method
+            data: JSON.stringify(cy.json()),
+            contentType: "application/json",
+            dataType: 'json',
+            // handle a non-successful response
+            success: function( data ) {
+                // Call this function on success
+                var del = cy.getElementById(data);
+                cy.remove(del);
+                return data;
+            },
+            error : function() {
+               console.log("EROOR");
+               console.log(data)
+            }
+      });
+  });
+});
 
 
   $("#fit").click(function() {

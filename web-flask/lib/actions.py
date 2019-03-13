@@ -1,3 +1,6 @@
+import random
+
+
 class Style(object):
     def __init__(self):
         self.style = [{
@@ -13,7 +16,7 @@ class Style(object):
                 'text-outline-color': '#222',
                 'background-color': "data(color)"
             }
-            },
+        },
             {
                 "selector": 'edge',
                 "style": {
@@ -42,6 +45,7 @@ class Style(object):
 
     def get(self):
         return self.style
+
 
 class Elements(object):
 
@@ -121,7 +125,7 @@ class Elements(object):
         return self.element
 
 
-class AddNode(object):
+class Node(object):
     def __init__(self):
         pass
 
@@ -129,8 +133,20 @@ class AddNode(object):
         pass
 
     def put(self, data):
+        name = data.get("name")
+        net = data.get("net")
         for item in data.get("elements").get("nodes"):
             if item.get("data").get("type") == "ellipse":
                 id = item.get("data").get("id")
         id = int(id)
-        return {"group": 'nodes', "data": {"id": str(id+1), "text": 'nodo'+str(id+1), "type": "ellipse", "color": "grey"}}
+        return {"group": 'nodes', "data": {"id": str(id + 1), "text": str(name),
+                                           "type": "ellipse", "color": "grey", "parent": net},
+                "position": {"x": random.random()*200,
+                             "y": random.random()*200}}
+
+    def delete(self, data):
+        for item in data.get("elements").get("nodes"):
+            if item.get("data").get("type") == "ellipse":
+                id = item.get("data").get("id")
+        id = int(id)
+        return 3

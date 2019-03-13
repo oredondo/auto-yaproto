@@ -1,7 +1,8 @@
 from flask import Flask, request
 from flask import render_template
 from flask_restful import Resource, Api, reqparse
-from lib.actions import Style, Elements, AddNode
+from lib.actions import Style, Elements, Node
+
 app = Flask(__name__, static_folder='statics')
 api = Api(app)
 parser = reqparse.RequestParser()
@@ -39,15 +40,19 @@ class ViewAddNode(Resource):
 
     @staticmethod
     def get():
-        out = AddNode().get()
+        out = Node().get()
         return out
 
     def put(self):
-        data = AddNode().put(request.json)
+        data = Node().put(request.json)
+        return data, 200
+
+    def delete(self):
+        data = Node().delete(request.json)
         return data, 200
 
 
-api.add_resource(ViewAddNode, '/api/addnode')
+api.add_resource(ViewAddNode, '/api/node')
 
 if __name__ == '__main__':
     app.run(debug=True, use_debugger=True, use_reloader=True, passthrough_errors=True)
