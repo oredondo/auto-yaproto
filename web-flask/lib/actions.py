@@ -135,18 +135,34 @@ class Node(object):
     def put(self, data):
         name = data.get("name")
         net = data.get("net")
+        output = []
+        parent = None
+        id = None
         for item in data.get("elements").get("nodes"):
+            if item.get("data").get("text") == name or \
+                    item.get("data").get("text") == net:
+                return []
             if item.get("data").get("type") == "ellipse":
                 id = item.get("data").get("id")
+            if item.get("data").get("name") == net:
+                parent = item.get("data").get("id")
+        if parent is None:
+            output.append({"group": 'nodes', "data": {"id": net, "text": net, "type": "rectangle", "color": "#D7D7D7"}})
         id = int(id)
-        return {"group": 'nodes', "data": {"id": str(id + 1), "text": str(name),
-                                           "type": "ellipse", "color": "grey", "parent": net},
-                "position": {"x": random.random()*200,
-                             "y": random.random()*200}}
+        output.append({"group": 'nodes', "data": {"id": str(id + 1), "text": str(name),
+                                                  "type": "ellipse", "color": "grey", "parent": net},
+                       "position": {"x": random.random() * 200, "y": random.random() * 200}})
+
+        return output
 
     def delete(self, data):
+        name = data.get("name")
+        id = None
         for item in data.get("elements").get("nodes"):
-            if item.get("data").get("type") == "ellipse":
+            if item.get("data").get("text") == name:
                 id = item.get("data").get("id")
-        id = int(id)
-        return 3
+                try:
+                    id = int(id)
+                except ValueError:
+                    pass
+        return id

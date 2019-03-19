@@ -195,10 +195,14 @@ $(document).ready(function() {
 
 $(document).ready(function() {
   $("#deleteNode").click(function() {
+    var name = $('#nameToDelete').val();
+    var dict = cy.json();
+    dict["name"] = name;
+    console.log(dict);
     $.ajax({
             url : "/api/node", // the endpoint
             type : "DELETE", // http method
-            data: JSON.stringify(cy.json()),
+            data: JSON.stringify(dict),
             contentType: "application/json",
             dataType: 'json',
             // handle a non-successful response
