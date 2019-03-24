@@ -39,12 +39,14 @@
                                  </a>
                             </li>
                             <li>
-                                <a href="#" data-toggle="modal" data-target="#myModal3">
+                                <a href="#" data-toggle="modal" data-target="#myModal2">
                                     Edges
                                  </a>
                             </li>
                             <li>
-                                <a href="#">Events</a>
+                                <a href="#" data-toggle="modal" data-target="#myModal3">
+                                    Routers
+                                 </a>
                             </li>
                             <li>
                                 <a href="#">About</a>
@@ -106,7 +108,7 @@
           </div>
 
     <!-- The Modal Edges -->
-          <div class="modal fade" id="myModal3">
+          <div class="modal fade" id="myModal2">
             <div class="modal-dialog">
               <div class="modal-content">
 
@@ -120,9 +122,9 @@
                 <div class="modal-body">
                         <form action="/action_page.php">
                           <div class="form-group">
-                            <label for="node">Node:</label>
+                            <label for="node">Source:</label>
                             <input type="text" class="form-control" id="node">
-                            <label for="router">Router:</label>
+                            <label for="router">Target:</label>
                             <input type="text" class="form-control" id="router">
                           </div>
                         </form>
@@ -132,6 +134,38 @@
                 <div class="modal-footer">
                   <button type="submit" class="btn btn-primary" data-dismiss="modal" id="addEdge">Add</button>
                   <button type="submit" class="btn btn-primary" data-dismiss="modal" id="deleteEdge">Delete</button>
+                  <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+    <!-- The Modal Routers -->
+          <div class="modal fade" id="myModal3">
+            <div class="modal-dialog">
+              <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                  <h4 class="modal-title">Router</h4>
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                        <form action="/action_page.php">
+                          <div class="form-group">
+                            <label for="router">Router:</label>
+                            <input type="text" class="form-control" id="nameRouter">
+                          </div>
+                        </form>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                  <button type="submit" class="btn btn-primary" data-dismiss="modal" id="addRouter">Add</button>
+                  <button type="submit" class="btn btn-primary" data-dismiss="modal" id="deleteRouter">Delete</button>
                   <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                 </div>
 

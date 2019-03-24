@@ -276,6 +276,67 @@ $(document).ready(function() {
   });
 });
 
+
+
+
+$(document).ready(function() {
+  $("#deleteRouter").click(function() {
+    var name = $('#nameRouter').val();
+    var dict = cy.json();
+    dict["name"] = name;
+    console.log(dict);
+    $.ajax({
+            url : "/api/router", // the endpoint
+            type : "DELETE", // http method
+            data: JSON.stringify(dict),
+            contentType: "application/json",
+            dataType: 'json',
+            // handle a non-successful response
+            success: function( data ) {
+                // Call this function on success
+                var del = cy.getElementById(data);
+                cy.remove(del);
+                return data;
+            },
+            error : function() {
+               console.log("EROOR");
+               console.log(data)
+            }
+      });
+  });
+});
+
+
+$(document).ready(function() {
+  $("#addRouter").click(function() {
+    var name = $('#nameRouter').val();
+    var dict = cy.json();
+    dict["name"] = name;
+    console.log(dict);
+    $.ajax({
+            url : "/api/router", // the endpoint
+            type : "PUT", // http method
+            data: JSON.stringify(dict),
+            contentType: "application/json",
+            dataType: 'json',
+            // handle a non-successful response
+            success: function( data ) {
+                // Call this function on success
+                cy.add(data);
+                return data;
+            },
+            error : function() {
+               console.log("EROOR");
+               console.log(data)
+            }
+      });
+  });
+});
+
+
+
+
+
   $("#fit").click(function() {
     console.log('cy=', cy);
     cy.fit();

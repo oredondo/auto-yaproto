@@ -1,7 +1,7 @@
 from flask import Flask, request
 from flask import render_template
 from flask_restful import Resource, Api, reqparse
-from lib.actions import Style, Elements, Node, Edge
+from lib.actions import Style, Elements, Node, Edge, Router
 
 app = Flask(__name__, static_folder='statics')
 api = Api(app)
@@ -67,6 +67,26 @@ class ViewEdge(Resource):
 
 
 api.add_resource(ViewEdge, '/api/edge')
+
+
+class ViewRouter(Resource):
+
+    @staticmethod
+    def get():
+        out = Router().get()
+        return out
+
+    def put(self):
+        data = Router().put(request.json)
+        return data, 200
+
+    def delete(self):
+        data = Router().delete(request.json)
+        return data, 200
+
+
+api.add_resource(ViewRouter, '/api/router')
+
 
 if __name__ == '__main__':
     app.run(debug=True, use_debugger=True, use_reloader=True, passthrough_errors=True)

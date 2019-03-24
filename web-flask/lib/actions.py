@@ -163,7 +163,7 @@ class Node(object):
         name = data.get("name")
         id = None
         for item in data.get("elements").get("nodes"):
-            if item.get("data").get("text") == name:
+            if item.get("data").get("text") == name and item.get("data").get("type") == "ellipse":
                 id = item.get("data").get("id")
                 try:
                     id = int(id)
@@ -207,3 +207,41 @@ class Edge(object):
             if item.get("data").get("source") == id or item.get("data").get("target") == id:
                 idEdge = item.get("data").get("id")
         return idEdge
+
+
+class Router(object):
+    def __init__(self):
+        pass
+
+    def get(self):
+        pass
+
+    def put(self, data):
+        name = data.get("name")
+        output = []
+        parent = None
+        id = None
+
+        for item in data.get("elements").get("nodes"):
+            if item.get("data").get("text") == name:
+                return []
+            if item.get("data").get("type") == "rectangle":
+                id = item.get("data").get("id")
+        output.append({"group": 'nodes', "data": {"id": str(name), "text": str(name),
+                                                  "type": "rectangle", "color": "grey"},
+
+                       "position": {"x": random.random() * 200, "y": random.random() * 200}})
+
+        return output
+
+    def delete(self, data):
+        name = data.get("name")
+        id = None
+        for item in data.get("elements").get("nodes"):
+            if item.get("data").get("text") == name and item.get("data").get("type") == "rectangle":
+                id = item.get("data").get("id")
+                try:
+                    id = int(id)
+                except ValueError:
+                    pass
+        return id
