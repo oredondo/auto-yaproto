@@ -1,7 +1,7 @@
 from flask import Flask, request
 from flask import render_template
 from flask_restful import Resource, Api, reqparse
-from lib.actions import Style, Elements, Node
+from lib.actions import Style, Elements, Node, Edge
 
 app = Flask(__name__, static_folder='statics')
 api = Api(app)
@@ -36,7 +36,7 @@ class ViewElements(Resource):
 api.add_resource(ViewElements, '/api/elements')
 
 
-class ViewAddNode(Resource):
+class ViewNode(Resource):
 
     @staticmethod
     def get():
@@ -52,7 +52,21 @@ class ViewAddNode(Resource):
         return data, 200
 
 
-api.add_resource(ViewAddNode, '/api/node')
+api.add_resource(ViewNode, '/api/node')
+
+
+class ViewEdge(Resource):
+
+    def put(self):
+        data = Edge().put(request.json)
+        return data, 200
+
+    def delete(self):
+        data = Edge().delete(request.json)
+        return data, 200
+
+
+api.add_resource(ViewEdge, '/api/edge')
 
 if __name__ == '__main__':
     app.run(debug=True, use_debugger=True, use_reloader=True, passthrough_errors=True)

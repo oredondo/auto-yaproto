@@ -195,7 +195,7 @@ $(document).ready(function() {
 
 $(document).ready(function() {
   $("#deleteNode").click(function() {
-    var name = $('#nameToDelete').val();
+    var name = $('#name').val();
     var dict = cy.json();
     dict["name"] = name;
     console.log(dict);
@@ -220,6 +220,61 @@ $(document).ready(function() {
   });
 });
 
+$(document).ready(function() {
+  $("#deleteEdge").click(function() {
+    var name = $('#node').val();
+    var dict = cy.json();
+    dict["name"] = name;
+    console.log(dict);
+    $.ajax({
+            url : "/api/edge", // the endpoint
+            type : "DELETE", // http method
+            data: JSON.stringify(dict),
+            contentType: "application/json",
+            dataType: 'json',
+            // handle a non-successful response
+            success: function( data ) {
+                // Call this function on success
+                var del = cy.getElementById(data);
+                cy.remove(del);
+                return data;
+            },
+            error : function() {
+               console.log("EROOR");
+               console.log(data)
+            }
+      });
+  });
+});
+
+
+$(document).ready(function() {
+  $("#addEdge").click(function() {
+    var node = $('#node').val();
+    var router = $('#router').val();
+    var dict = cy.json();
+    dict["node"] = node;
+    dict["router"] = router;
+    console.log(dict);
+    $.ajax({
+            url : "/api/edge", // the endpoint
+            type : "PUT", // http method
+            data: JSON.stringify(dict),
+            contentType: "application/json",
+            dataType: 'json',
+            // handle a non-successful response
+            success: function( data ) {
+                // Call this function on success
+                cy.add(data);
+                return data;
+            },
+            error : function() {
+               console.log("EROOR");
+               console.log(data)
+            }
+      });
+  });
+});
 
   $("#fit").click(function() {
     console.log('cy=', cy);
