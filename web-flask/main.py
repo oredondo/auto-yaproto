@@ -2,6 +2,7 @@ from flask import Flask, request
 from flask import render_template
 from flask_restful import Resource, Api, reqparse
 from lib.actions import Style, Elements, Node, Edge, Router
+from lib.config import Config
 
 app = Flask(__name__, static_folder='statics')
 api = Api(app)
@@ -44,6 +45,7 @@ class ViewNode(Resource):
         return out
 
     def put(self):
+        Config(request.json)
         data = Node().put(request.json)
         return data, 200
 

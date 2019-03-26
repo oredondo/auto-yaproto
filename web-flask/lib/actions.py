@@ -53,31 +53,31 @@ class Elements(object):
         self.element = {
             "nodes": [{
                 "data": {
-                    "id": "0",
+                    "id": "router",
                     "text": 'router',
                     "type": 'rectangle',
                     "color": "grey"
                 }
             }, {
                 "data": {
-                    "id": '1',
+                    "id": 'nodo1',
                     "text": 'nodo1',
-                    "parent": 'a',
+                    "parent": 'net1',
                     "type": "ellipse",
                     "color": "grey"
                 }
             }, {
                 "data": {
-                    "id": '2',
-                    "parent": 'b',
+                    "id": 'nodo2',
+                    "parent": 'net0',
                     "text": 'nodo2',
                     "type": "ellipse",
                     "color": "grey"
                 }
             }, {
                 "data": {
-                    "id": '3',
-                    "parent": 'b',
+                    "id": 'nodo3',
+                    "parent": 'net0',
                     "text": 'nodo3',
                     "type": "ellipse",
                     "color": "grey"
@@ -85,16 +85,18 @@ class Elements(object):
             },
                 {
                     "data": {
-                        "id": 'b',
+                        "id": 'net0',
                         "text": 'net0',
+                        "meta": "net",
                         "type": "rectangle",
                         "color": "#D7D7D7"
                     }
                 },
                 {
                     "data": {
-                        "id": 'a',
+                        "id": 'net1',
                         "text": 'net1',
+                        "meta": "net",
                         "type": "rectangle",
                         "color": "#D7D7D7"
                     }
@@ -103,20 +105,20 @@ class Elements(object):
             "edges": [{
                 "data": {
                     "color": '#000',
-                    "source": '0',
-                    "target": '1'
+                    "source": 'router',
+                    "target": 'nodo1'
                 }
             }, {
                 "data": {
                     "color": '#000',
-                    "source": '0',
-                    "target": '2'
+                    "source": 'router',
+                    "target": 'nodo2'
                 }
             }, {
                 "data": {
                     "color": '#000',
-                    "source": '0',
-                    "target": '3'
+                    "source": 'router',
+                    "target": 'nodo3'
                 }
             }]  ## edges
         }
@@ -150,10 +152,10 @@ class Node(object):
                 parent = item.get("data").get("id")
 
         if parent is None:
-            output.append({"group": 'nodes', "data": {"id": net, "text": net, "type": "rectangle", "color": "#D7D7D7"}})
+            output.append({"group": 'nodes', "data": {"id": net, "text": net, "meta":"net",
+                                                      "type": "rectangle", "color": "#D7D7D7"}})
 
-        id = int(id)
-        output.append({"group": 'nodes', "data": {"id": str(id + 1), "text": str(name),
+        output.append({"group": 'nodes', "data": {"id": str(name), "text": str(name),
                                                   "type": "ellipse", "color": "grey", "parent": net},
                        "position": {"x": random.random() * 200, "y": random.random() * 200}})
 
@@ -165,10 +167,6 @@ class Node(object):
         for item in data.get("elements").get("nodes"):
             if item.get("data").get("text") == name and item.get("data").get("type") == "ellipse":
                 id = item.get("data").get("id")
-                try:
-                    id = int(id)
-                except ValueError:
-                    pass
         return id
 
 
