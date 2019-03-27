@@ -45,7 +45,6 @@ class ViewNode(Resource):
         return out
 
     def put(self):
-        Config(request.json)
         data = Node().put(request.json)
         return data, 200
 
