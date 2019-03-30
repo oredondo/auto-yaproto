@@ -2,7 +2,8 @@ from flask import Flask, request
 from flask import render_template
 from flask_restful import Resource, Api, reqparse
 from lib.actions import Style, Elements, Node, Edge, Router
-from lib.config import Config
+from lib.deploy import Deploy
+from flask import stream_with_context, request, Response
 
 app = Flask(__name__, static_folder='statics')
 api = Api(app)
@@ -87,6 +88,29 @@ class ViewRouter(Resource):
 
 
 api.add_resource(ViewRouter, '/api/router')
+
+
+class ViewDeploy(Resource):
+
+    def put(self):
+        out = Deploy(request.json).run()
+        return "ok", 200
+
+    def get(self):
+        data ={}
+        stream_with_context(Deploy(data).run())
+        return Response()
+
+api.add_resource(ViewDeploy, '/api/deploy')
+
+
+class ViewStream(Resource):
+
+    def get(self):
+        dato = Deploy().stream()
+        return Response(stream_with_context(dato), 200)
+
+api.add_resource(ViewStream, '/api/stream')
 
 
 if __name__ == '__main__':

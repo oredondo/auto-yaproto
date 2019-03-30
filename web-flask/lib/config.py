@@ -19,26 +19,26 @@ class Config(object):
         nets = {}
         routers = []
         i = 0
-        for item in data.get("elements").get("nodes"):
-            if "parent" in item.get("data").keys():
-                nets.setdefault(item.get("data").get("text"), []).append(item.get("data").get("parent"))
-            if item.get("data").get("type") == "rectangle" and item.get("data").get("meta") != "net":
-                routers.append(item.get("data").get("text"))
-                nets.setdefault(item.get("data").get("text"), [])
+        for item in data.get.get:
+            if "parent" in item.get.keys():
+                nets.setdefault(item.get.get, []).append(item.get.get)
+            if item.get.get == "rectangle" and item.get.get != "net":
+                routers.append(item.get.get)
+                nets.setdefault(item.get.get, [])
 
-        for item in data.get("elements").get("edges"):
-            if item.get("data").get("source") in routers and not item.get("data").get("target") in routers:
-                if nets[item.get("data").get("target")][0] not in nets[item.get("data").get("source")]:
-                    nets[item.get("data").get("source")].append(nets[item.get("data").get("target")][0])
+        for item in data.get.get:
+            if item.get.get in routers and not item.get.get in routers:
+                if nets[item.get.get][0] not in nets[item.get.get]:
+                    nets[item.get.get].append(nets[item.get.get][0])
 
-            if item.get("data").get("target") in routers and not item.get("data").get("source") in routers:
-                if nets[item.get("data").get("source")][0] not in nets[item.get("data").get("target")]:
-                    nets[item.get("data").get("target")].append(nets[item.get("data").get("source")][0])
+            if item.get.get in routers and not item.get.get in routers:
+                if nets[item.get.get][0] not in nets[item.get.get]:
+                    nets[item.get.get].append(nets[item.get.get][0])
 
-            if item.get("data").get("target") in routers and item.get("data").get("source") in routers:
+            if item.get.get in routers and item.get.get in routers:
                 i = i + 1
-                nets.setdefault(item.get("data").get("source"), []).append("private" + str(i))
-                nets.setdefault(item.get("data").get("target"), []).append("private" + str(i))
+                nets.setdefault(item.get.get, []).append("private" + str(i))
+                nets.setdefault(item.get.get, []).append("private" + str(i))
         return nets, routers
 
 

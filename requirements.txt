@@ -7,3 +7,5 @@ MarkupSafe==1.1.0
 Werkzeug==0.14.1
 flask-restful==0.3.7
 netaddr==0.7.19
+python-vagrant==0.5.15
+fabric==2.4.0

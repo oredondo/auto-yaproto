@@ -49,6 +49,11 @@
                                  </a>
                             </li>
                             <li>
+                                <a href="#" data-toggle="modal" data-target="#myModal4">
+                                    Deploy
+                                 </a>
+                            </li>
+                            <li>
                                 <a href="#">About</a>
                             </li>
                             <li>
@@ -174,6 +179,38 @@
           </div>
 
 
+          <div class="modal fade" id="myModal4">
+            <div class="modal-dialog">
+              <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                  <h4 class="modal-title">Deploy</h4>
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                        <form >
+                          <div class="form-group">
+                            <button type="button" class="btn btn-primary" id="deploy">Deploy</button>
+                            <h4 id="progressTest"></h4>
+
+                          </div>
+                        </form>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                  <button type="submit" class="btn btn-primary" data-dismiss="modal" id="terminate">terminate</button>
+                  <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+
 </div>
         <!-- /#page-content-wrapper -->
 <script src="../statics/js/jquery.js"></script>
@@ -182,6 +219,7 @@
 <script src='https://cdn.rawgit.com/cpettitt/dagre/v0.7.4/dist/dagre.min.js'></script>
 <script src='https://cdn.rawgit.com/cytoscape/cytoscape.js-dagre/1.1.2/cytoscape-dagre.js'></script>
 <script src="../statics/js/code.js"></script>
+<script src="../statics/js/stream.js"></script>
 </body>
 </html>
 </html>

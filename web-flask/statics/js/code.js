@@ -334,6 +334,26 @@ $(document).ready(function() {
 });
 
 
+$(document).ready(function() {
+  $("#deploy").click(function() {
+    var dict = cy.json();
+    console.log(dict);
+    $.ajax({
+            url : "/api/deploy", // the endpoint
+            type : "PUT", // http method
+            data: JSON.stringify(dict),
+            contentType: "application/json",
+            dataType: 'json',
+            // handle a non-successful response
+            success: function( data ) {
+               console.log("inside")
+               var stream = new GetSteam();
+            }
+      });
+  });
+});
+
+
 
 
 
