@@ -1,24 +1,42 @@
 var lastResponseLength = false;
 
+
+
+
+
 function GetSteam() {
-    while (1) {
-        $.ajax({
+    $(document).ready(function() {
+       refreshIntervalId = window.setInterval(function() {
+            console.log("call");
+            Stream(); //Pass Data Here...!!!
+        }, 750); //Call every 1 min
+    });
+}
+
+function Stream() {
+    $.ajax({
             type: 'get',
             url: '/api/stream',
             dataType: 'text',
-            processData: false,
-            xhrFields: {
-                // Getting on progress streaming response
-                onprogress: function(e)
+            success:  function(e)
                 {
-                    var progressResponse;
-                    var response = e.currentTarget.response;
+                    if(e==""){
+                    clearInterval(refreshIntervalId);
+                    }
 
-                    progressResponse = response;
-                    lastResponseLength = response.length;
-                    $('#progressTest').text(progressResponse);
-                }
+                    $('#progressTest').append("<h4 >"+ e + "</h4>" );
+                },
+            error : function() {
+               console.log("EROOR");
             }
         });
+}
+
+function sleep(milliseconds) {
+  var start = new Date().getTime();
+  for (var i = 0; i < 1e7; i++) {
+    if ((new Date().getTime() - start) > milliseconds){
+      break;
     }
+  }
 }

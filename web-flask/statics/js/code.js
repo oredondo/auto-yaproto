@@ -346,7 +346,6 @@ $(document).ready(function() {
             dataType: 'json',
             // handle a non-successful response
             success: function( data ) {
-               console.log("inside")
                var stream = new GetSteam();
             }
       });

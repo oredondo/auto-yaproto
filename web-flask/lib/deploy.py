@@ -55,8 +55,9 @@ class Deploy(object):
             global process
             retcode = process.poll()  # returns None while subprocess is running
             line = process.stdout.readline()
-            yield line
             if (retcode is not None):
                 return
+            yield line
+
 
         return generate()
