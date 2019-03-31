@@ -2,6 +2,8 @@
 - hosts: all
   roles:
       - role: base
+
+- hosts: routers
   tasks:
     - name: install the java 1.8
       yum:

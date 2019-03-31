@@ -18,7 +18,7 @@ class Deploy(object):
         vagrantfile_path = os.path.join(vagrantdir,
                                         "Vagrantfile")
 
-        # GenerateVagrantFile(template_path="Vagrantfile", vagrantfile_path=vagrantfile_path, config=conf)
+        GenerateVagrantFile(template_path="Vagrantfile", vagrantfile_path=vagrantfile_path, config=conf)
         print(conf)
         os.chdir(vagrantdir)
         cmd = ['vagrant', 'up']
@@ -55,9 +55,7 @@ class Deploy(object):
             global process
             retcode = process.poll()  # returns None while subprocess is running
             line = process.stdout.readline()
+            yield line
             if (retcode is not None):
                 return
-            yield line
-
-
         return generate()

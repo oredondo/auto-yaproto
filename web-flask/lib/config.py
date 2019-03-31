@@ -89,7 +89,7 @@ class Config(object):
 
         :return:
         """
-        ip = IPNetwork('172.24.0.0/19')
-        subnets = list(ip.subnet(23))
+        ip = IPNetwork('172.24.0.0/20')
+        subnets = list(ip.subnet(24))
         return subnets
 

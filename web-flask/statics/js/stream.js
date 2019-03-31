@@ -7,9 +7,8 @@ var lastResponseLength = false;
 function GetSteam() {
     $(document).ready(function() {
        refreshIntervalId = window.setInterval(function() {
-            console.log("call");
             Stream(); //Pass Data Here...!!!
-        }, 750); //Call every 1 min
+        }, 150); //Call every 0.5 min
     });
 }
 
@@ -21,10 +20,10 @@ function Stream() {
             success:  function(e)
                 {
                     if(e==""){
-                    clearInterval(refreshIntervalId);
+                        clearInterval(refreshIntervalId);
+                    }else if(e!=' '){
+                        $('#progressTest').append("<p><kbd>"+ e + "</kbd></p>" );
                     }
-
-                    $('#progressTest').append("<h4 >"+ e + "</h4>" );
                 },
             error : function() {
                console.log("EROOR");
