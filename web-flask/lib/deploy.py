@@ -13,13 +13,13 @@ class Deploy(object):
 
     def run(self):
 
-        # conf = Config(data=self.data).get()
+        conf = Config(data=self.data).get()
         vagrantdir = os.getcwd().replace("web-flask", "vagrant_getting_started")
         vagrantfile_path = os.path.join(vagrantdir,
                                         "Vagrantfile")
 
         # GenerateVagrantFile(template_path="Vagrantfile", vagrantfile_path=vagrantfile_path, config=conf)
-
+        print(conf)
         os.chdir(vagrantdir)
         cmd = ['vagrant', 'up']
         return self.run_command(cmd)

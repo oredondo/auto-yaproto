@@ -135,21 +135,21 @@ class Node(object):
         pass
 
     def put(self, data):
-        name = data.get
-        net = data.get
+        name = data.get("name")
+        net = data.get("net")
         output = []
         parent = None
         id = None
 
-        for item in data.get.get:
-            if item.get.get == name:
+        for item in data.get("elements").get("nodes"):
+            if item.get("data").get("text") == name:
                 return []
-            if item.get.get == net:
-                net = item.get.get
-            if item.get.get == "ellipse":
-                id = item.get.get
-            if item.get.get == net:
-                parent = item.get.get
+            if item.get("data").get("text") == net:
+                net = item.get("data").get("id")
+            if item.get("data").get("type") == "ellipse":
+                id = item.get("data").get("id")
+            if item.get("data").get("name") == net:
+                parent = item.get("data").get("id")
 
         if parent is None:
             output.append({"group": 'nodes', "data": {"id": net, "text": net, "meta":"net",
@@ -162,11 +162,11 @@ class Node(object):
         return output
 
     def delete(self, data):
-        name = data.get
+        name = data.get("name")
         id = None
-        for item in data.get.get:
-            if item.get.get == name and item.get.get == "ellipse":
-                id = item.get.get
+        for item in data.get("elements").get("nodes"):
+            if item.get("data").get("text") == name and item.get("data").get("type") == "ellipse":
+                id = item.get("data").get("id")
         return id
 
 
@@ -175,14 +175,14 @@ class Edge(object):
         pass
 
     def put(self, data):
-        node = data.get
-        router = data.get
+        node = data.get("node")
+        router = data.get("router")
         output = []
         id = []
-        for item in data.get.get:
-            if item.get.get == node or \
-                    item.get.get == router:
-                id.append(str(item.get.get))
+        for item in data.get("elements").get("nodes"):
+            if item.get("data").get("text") == node or \
+                    item.get("data").get("text") == router:
+                id.append(str(item.get("data").get("id")))
         try:
             output.append({"group": "edges", "data": {"color": "#000",
                                                       "source": id[0],
@@ -194,16 +194,16 @@ class Edge(object):
         return output
 
     def delete(self, data):
-        name = data.get
+        name = data.get("name")
         id = None
         idEdge = None
-        for item in data.get.get:
-            if item.get.get == name:
-                id = str(item.get.get)
+        for item in data.get("elements").get("nodes"):
+            if item.get("data").get("text") == name:
+                id = str(item.get("data").get("id"))
 
-        for item in data.get.get:
-            if item.get.get == id or item.get.get == id:
-                idEdge = item.get.get
+        for item in data.get("elements").get("edges"):
+            if item.get("data").get("source") == id or item.get("data").get("target") == id:
+                idEdge = item.get("data").get("id")
         return idEdge
 
 
@@ -215,16 +215,16 @@ class Router(object):
         pass
 
     def put(self, data):
-        name = data.get
+        name = data.get("name")
         output = []
         parent = None
         id = None
 
-        for item in data.get.get:
-            if item.get.get == name:
+        for item in data.get("elements").get("nodes"):
+            if item.get("data").get("text") == name:
                 return []
-            if item.get.get == "rectangle":
-                id = item.get.get
+            if item.get("data").get("type") == "rectangle":
+                id = item.get("data").get("id")
         output.append({"group": 'nodes', "data": {"id": str(name), "text": str(name),
                                                   "type": "rectangle", "color": "grey"},
 
@@ -233,11 +233,11 @@ class Router(object):
         return output
 
     def delete(self, data):
-        name = data.get
+        name = data.get("name")
         id = None
-        for item in data.get.get:
-            if item.get.get == name and item.get.get == "rectangle":
-                id = item.get.get
+        for item in data.get("elements").get("nodes"):
+            if item.get("data").get("text") == name and item.get("data").get("type") == "rectangle":
+                id = item.get("data").get("id")
                 try:
                     id = int(id)
                 except ValueError:

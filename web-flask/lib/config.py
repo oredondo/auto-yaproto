@@ -19,26 +19,27 @@ class Config(object):
         nets = {}
         routers = []
         i = 0
-        for item in data.get.get:
-            if "parent" in item.get.keys():
-                nets.setdefault(item.get.get, []).append(item.get.get)
-            if item.get.get == "rectangle" and item.get.get != "net":
-                routers.append(item.get.get)
-                nets.setdefault(item.get.get, [])
+        for item in data.get("elements").get("nodes"):
+            if "parent" in item.get("data").keys():
+                nets.setdefault(item.get("data").get("parent"), []).append(item.get("data").get("text"))
+            if item.get("data").get("type") == "rectangle" and item.get("data").get("meta") != "net":
+                routers.append(item.get("data").get("text"))
 
-        for item in data.get.get:
-            if item.get.get in routers and not item.get.get in routers:
-                if nets[item.get.get][0] not in nets[item.get.get]:
-                    nets[item.get.get].append(nets[item.get.get][0])
+        for item in data.get("elements").get("edges"):
+            if item.get("data").get("source") in routers and not item.get("data").get("target") in routers:
+                for key, value in nets.items():
+                    if item.get("data").get("target") in value and not item.get("data").get("source") in value:
+                        nets[key].append(item.get("data").get("source"))
 
-            if item.get.get in routers and not item.get.get in routers:
-                if nets[item.get.get][0] not in nets[item.get.get]:
-                    nets[item.get.get].append(nets[item.get.get][0])
+            if item.get("data").get("target") in routers and not item.get("data").get("source") in routers:
+                for key, value in nets.items():
+                    if item.get("data").get("source") in value and not item.get("data").get("target") in value:
+                        nets[key].append(item.get("data").get("target"))
 
-            if item.get.get in routers and item.get.get in routers:
+            if item.get("data").get("target") in routers and item.get("data").get("source") in routers:
                 i = i + 1
-                nets.setdefault(item.get.get, []).append("private" + str(i))
-                nets.setdefault(item.get.get, []).append("private" + str(i))
+                nets.setdefault("private" + str(i), []).append(item.get("data").get("source"))
+                nets.setdefault("private" + str(i), []).append(item.get("data").get("target"))
         return nets, routers
 
 
@@ -57,30 +58,29 @@ class Config(object):
         # genera diccionario con las redes y sus ips
         for value in nets:
             for item in nets[value]:
-                if item in red_aux.keys():
+                if value in red_aux.keys():
                     pass
                 else:
                     try:
-                        red_aux[item] = []
+                        red_aux[value] = []
                         for i in subnets.pop(0):
-                            red_aux[item].append("%s" % i)
+                            red_aux[value].append("%s" % i)
                     except BaseException:
                         pass  # TODO: Generar buenas excepciones
 
         # genera dicionario de configuracion con nodos y routers con sus ips
         for value in nets:
-            if value in routers:
-                for item in nets[value]:
-                    if value in config["routers"].keys():
-                        config["routers"][value].append(red_aux[item].pop(1))
+            for item in nets[value]:
+                if item in routers:
+                    if item in config["routers"].keys():
+                        config["routers"][item].append(red_aux[value].pop(1))
                     else:
-                        config["routers"][value] = [red_aux[item].pop(1)]
-            else:
-                for item in nets[value]:
-                    if value in config["nodes"].keys():
-                        config["nodes"][value].append(red_aux[item].pop(-3))
+                        config["routers"][item] = [red_aux[value].pop(1)]
+                else:
+                    if item in config["nodes"].keys():
+                        config["nodes"][item].append(red_aux[value].pop(-3))
                     else:
-                        config["nodes"][value] = [red_aux[item].pop(-3)]
+                        config["nodes"][item] = [red_aux[value].pop(-3)]
         return config
 
 
