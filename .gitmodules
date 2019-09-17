@@ -1,0 +1,3 @@
+[submodule "vagrant_getting_started/data/yaproto"]
+	path = vagrant_getting_started/data/yaproto
+	url = git@github.com:javierrledesma/yaproto.git
