@@ -5,7 +5,7 @@
 
 - hosts: routers
   tasks:
-    - name: install the java 1.8
+    - name: install the java 1.6
       yum:
-        name: java-1.8.0-openjdk
+        name: java-1.6.0-openjdk-devel
         state: present
