@@ -3,3 +3,4 @@
 *.pyc
 web-flask/.idea/*
 web-flask/venv/*
+vagrant_getting_started/data

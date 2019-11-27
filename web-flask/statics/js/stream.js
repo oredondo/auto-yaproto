@@ -19,11 +19,8 @@ function Stream() {
             dataType: 'text',
             success:  function(e)
                 {
-                    if(e==""){
-                        clearInterval(refreshIntervalId);
-                    }else if(e!=' '){
-                        $('#progressTest').append("<p><kbd>"+ e + "</kbd></p>" );
-                    }
+                     $('#progressTest').append("<p><kbd>"+ e + "</kbd></p>" );
+
                 },
             error : function() {
                console.log("EROOR");
