@@ -1,4 +1,4 @@
-[submodule "vagrant_getting_started/data/yaproto"]
+[submodule "yaproto"]
 	path = vagrant_getting_started/data/yaproto
 	url = git@github.com:oredondo/yaproto.git
 	branch = oredondo
