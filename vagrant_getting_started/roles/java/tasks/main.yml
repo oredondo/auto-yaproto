@@ -1,2 +1,11 @@
 ---
 # tasks file for java
+
+- name: install the java 1.8
+  yum:
+    name: java-1.8.0-openjdk-devel
+    state: present
+- name: Copy
+  copy:
+    src: "{{ role_path }}/files/librocksaw.so"
+    dest: /vagrant/data/yaproto/lib/librocksaw.so
