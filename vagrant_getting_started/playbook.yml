@@ -2,7 +2,7 @@
 - hosts: all
   roles:
       - role: base
-      
+
 - hosts: routers
   roles:
       - role: java
