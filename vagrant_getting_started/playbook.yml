@@ -5,4 +5,8 @@
 
 - hosts: routers
   roles:
-      - role: java
+      - role: router
+
+- hosts: all
+  roles:
+      - role: network

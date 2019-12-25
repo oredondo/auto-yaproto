@@ -42,7 +42,6 @@ class Config(object):
                 nets.setdefault("private" + str(i), []).append(item.get("data").get("target"))
         return nets, routers
 
-
     def __assign_ips(self, subnets, nets, routers):
         """
 
@@ -52,7 +51,8 @@ class Config(object):
         :return:
         """
         config = {"nodes": {},
-                  "routers": {}}
+                  "routers": {},
+                  "gateways": {}}
         red_aux = {}
 
         # genera diccionario con las redes y sus ips
@@ -76,13 +76,29 @@ class Config(object):
                         config["routers"][item].append(red_aux[value].pop(1))
                     else:
                         config["routers"][item] = [red_aux[value].pop(1)]
+                        # gates = []
+                        # for i in nets[value]:
+                        #     if i != item:
+                        #         gates.append(i)
+                        # config["gateways"][config["routers"][item][0]] = gates
                 else:
                     if item in config["nodes"].keys():
                         config["nodes"][item].append(red_aux[value].pop(-3))
                     else:
                         config["nodes"][item] = [red_aux[value].pop(-3)]
+        self.__gateways(nets, config)
         return config
 
+    def __gateways(self, nets, config):
+        {'nodes': {'nodo1': ['172.24.0.253'], 'nodo2': ['172.24.0.252']},
+         'routers': {'router': ['172.24.0.1', '172.24.1.1', '172.24.2.1'], 'router2': ['172.24.1.2'],
+                     'router3': ['172.24.2.2']}, 'gateways': {}}
+
+        {'net1': ['nodo1', 'nodo2', 'router'], 'private1': ['router', 'router2'], 'private2': ['router', 'router3']}
+        for nodo in config.get("nodes"):
+            print(nodo)
+            for net in nets:
+                print(net)
 
     def __get_subnets(self):
         """
@@ -92,4 +108,3 @@ class Config(object):
         ip = IPNetwork('172.24.0.0/20')
         subnets = list(ip.subnet(24))
         return subnets
-

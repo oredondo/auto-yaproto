@@ -4,9 +4,7 @@
 
 java -Djava.library.path=/vagrant/data/yaproto/lib  -classpath /vagrant/data/yaproto/lib/slf4j-api-1.6.6.jar:/vagrant/data/yaproto/lib/slf4j-jdk14-1.6.6.jar:/vagrant/data/yaproto/bin msti.ospfv2.ProtocoloOSPFv2
 
-java -Djava.library.path=/vagrant/data/yaproto/lib  -classpath /vagrant/data/yaproto/lib/slf4j-api-1.6.6.jar:/vagrant/data/yaproto/lib/slf4j-jdk14-1.6.6.jar:/vagrant/data/yaproto/bin msti.rip.SimuladorEncaminadorRIPv2
-
-
+sudo java -Djava.library.path=/vagrant/data/yaproto/lib  -classpath /vagrant/data/yaproto/lib/slf4j-api-1.6.6.jar:/vagrant/data/yaproto/lib/slf4j-jdk14-1.6.6.jar:/vagrant/data/yaproto/bin msti.rip.ProtocoloRIPv2
 
 jni.cc=gcc -I/usr/lib/jvm/java-1.6.0-openjdk-1.6.0.41.x86_64/include -I/usr/lib/jvm/java-1.6.0-openjdk-1.6.0.41.x86_64/include/linux -nostartfiles
 
@@ -30,3 +28,36 @@ ant -Djni.cc='gcc -m64 -I/usr/lib/jvm/java-1.8.0/include -I/usr/lib/jvm/java-1.8
 
 
 ant jar
+
+
+# Create jar
+
+1. Create manifest
+2. jar cfm ProtocoloOSPFv2.jar manifestOSPFv2 -C /vagrant/data/yaproto/bin .
+3. sudo java -Djava.library.path=/vagrant/data/yaproto/lib -jar ProtocoloOSPFv2.jar
+sudo java -Djava.library.path=/vagrant/data/yaproto/lib -jar ProtocoloRIPv2.jar
+
+# quitar gateway default
+
+sudo route del default gw 10.0.2.2
+sudo route add default gw 192.168.100.2
+sudo sysctl -w net.ipv4.ip_forward=1
+sudo systemctl stop chronyd
+
+ansible.host_vars = {
+  "nodo1" => {"gateway" => "172.24.0.1",
+              "ip" => "172.24.0.253",
+              "device" => "eth1"},
+  "nodo2" => {"gateway" => "172.24.1.1",
+              "ip" => "172.24.1.253",
+              "device" => "eth1"},
+  "nodo3" => {"gateway" => "172.24.2.1",
+              "ip" => "172.24.2.253",
+              "device" => "eth1"},
+  "router" => {"gateway" => "172.24.3.2",
+               "ip" => "172.24.3.1",
+               "device" => "eth3"},
+  "nuevo" => {"gateway" => "172.24.3.1",
+              "ip" => "172.24.3.2",
+              "device" => "eth3"},
+}

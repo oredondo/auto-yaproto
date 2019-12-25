@@ -4,8 +4,17 @@
   yum:
     name: net-tools
     state: present
+- name: install traceroute
+  yum:
+    name: traceroute
+    state: present
 - selinux:
     state: disabled
+- name: disable and stop chronyd
+  service:
+    name: chronyd
+    enabled: no
+    state: stopped
 - name: Reboot a machine updates to apply
   reboot:
     reboot_timeout: 600

@@ -164,10 +164,21 @@ class Node(object):
     def delete(self, data):
         name = data.get("name")
         id = None
+        ok = True
+        net = None
+        result = []
         for item in data.get("elements").get("nodes"):
             if item.get("data").get("text") == name and item.get("data").get("type") == "ellipse":
                 id = item.get("data").get("id")
-        return id
+                result.append(id)
+                net = item.get("data").get("parent")
+
+        for other in data.get("elements").get("nodes"):
+            if net == other.get("data").get("parent") and id != other.get("data").get("id"):
+                ok = False
+        if ok:
+            result.append(net)
+        return result
 
 
 class Edge(object):

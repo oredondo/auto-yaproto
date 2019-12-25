@@ -1,2 +1,9 @@
 ---
 # tasks file for network
+- debug:
+    msg: ip {{ ip }} gateway {{ gateway }} device {{ device }}
+
+- name: "Delete default gateway"
+  command: route del default gw 10.0.2.2
+- name: "Add router gateway"
+  command: route add default gw {{ gateway }}
