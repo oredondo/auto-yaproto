@@ -90,11 +90,12 @@ class Config(object):
         return config
 
     def __gateways(self, nets, config):
-        {'nodes': {'nodo1': ['172.24.0.253'], 'nodo2': ['172.24.0.252']},
+        """{'nodes': {'nodo1': ['172.24.0.253'], 'nodo2': ['172.24.0.252']},
          'routers': {'router': ['172.24.0.1', '172.24.1.1', '172.24.2.1'], 'router2': ['172.24.1.2'],
                      'router3': ['172.24.2.2']}, 'gateways': {}}
 
         {'net1': ['nodo1', 'nodo2', 'router'], 'private1': ['router', 'router2'], 'private2': ['router', 'router3']}
+        """
         for nodo in config.get("nodes"):
             print(nodo)
             for net in nets:

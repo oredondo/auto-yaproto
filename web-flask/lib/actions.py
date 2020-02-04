@@ -14,6 +14,7 @@ class Style(object):
                 'color': 'white',
                 'text-outline-width': 2,
                 'text-outline-color': '#222',
+                'text-valign': 'top',
                 'background-color': "data(color)"
             }
         },
@@ -55,6 +56,7 @@ class Elements(object):
                 "data": {
                     "id": "router",
                     "text": 'router',
+                    "parent": "netRouter",
                     "type": 'rectangle',
                     "color": "grey"
                 }
@@ -96,6 +98,15 @@ class Elements(object):
                     "data": {
                         "id": 'net1',
                         "text": 'net1',
+                        "meta": "net",
+                        "type": "rectangle",
+                        "color": "#D7D7D7"
+                    }
+                },
+                {
+                    "data": {
+                        "id": 'netRouter',
+                        "text": 'netRouter',
                         "meta": "net",
                         "type": "rectangle",
                         "color": "#D7D7D7"
@@ -152,7 +163,7 @@ class Node(object):
                 parent = item.get("data").get("id")
 
         if parent is None:
-            output.append({"group": 'nodes', "data": {"id": net, "text": net, "meta":"net",
+            output.append({"group": 'nodes', "data": {"id": net, "text": net, "meta": "net",
                                                       "type": "rectangle", "color": "#D7D7D7"}})
 
         output.append({"group": 'nodes', "data": {"id": str(name), "text": str(name),
@@ -198,7 +209,7 @@ class Edge(object):
             output.append({"group": "edges", "data": {"color": "#000",
                                                       "source": id[0],
                                                       "target": id[1],
-                                                      "id": "ele"+id[0]+id[1]}})
+                                                      "id": "ele" + id[0] + id[1]}})
         except ValueError:
             pass
 
@@ -227,6 +238,7 @@ class Router(object):
 
     def put(self, data):
         name = data.get("name")
+        net = data.get("net")
         output = []
         parent = None
         id = None
@@ -234,11 +246,19 @@ class Router(object):
         for item in data.get("elements").get("nodes"):
             if item.get("data").get("text") == name:
                 return []
+            if item.get("data").get("text") == net:
+                net = item.get("data").get("id")
             if item.get("data").get("type") == "rectangle":
                 id = item.get("data").get("id")
-        output.append({"group": 'nodes', "data": {"id": str(name), "text": str(name),
-                                                  "type": "rectangle", "color": "grey"},
+            if item.get("data").get("name") == net:
+                parent = item.get("data").get("id")
+        if parent is None:
+            output.append({"group": 'nodes', "data": {"id": str(net), "text": str(net), "meta": "net",
+                                                      "type": "rectangle", "color": "#D7D7D7"},
+                           "position": {"x": random.random() * 200, "y": random.random() * 200}})
 
+        output.append({"group": 'nodes', "data": {"id": str(name), "text": str(name),
+                                                  "type": "rectangle", "color": "grey", "parent": net},
                        "position": {"x": random.random() * 200, "y": random.random() * 200}})
 
         return output
@@ -246,11 +266,19 @@ class Router(object):
     def delete(self, data):
         name = data.get("name")
         id = None
+        ok = True
+        net = None
+        result = []
         for item in data.get("elements").get("nodes"):
             if item.get("data").get("text") == name and item.get("data").get("type") == "rectangle":
                 id = item.get("data").get("id")
-                try:
-                    id = int(id)
-                except ValueError:
-                    pass
-        return id
+                result.append(id)
+                net = item.get("data").get("parent")
+
+        for other in data.get("elements").get("nodes"):
+            if net == other.get("data").get("parent") and id != other.get("data").get("id"):
+                ok = False
+        if ok:
+            result.append(net)
+
+        return result

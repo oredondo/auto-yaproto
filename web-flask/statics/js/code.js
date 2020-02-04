@@ -296,9 +296,11 @@ $(document).ready(function() {
             // handle a non-successful response
             success: function( data ) {
                 // Call this function on success
-                var del = cy.getElementById(data);
-                cy.remove(del);
-                return data;
+                jQuery.each( data, function( key, value ) {
+                    var del = cy.getElementById(value);
+                    cy.remove(del);
+                    return data;
+                });
             },
             error : function() {
                console.log("EROOR");
@@ -312,8 +314,10 @@ $(document).ready(function() {
 $(document).ready(function() {
   $("#addRouter").click(function() {
     var name = $('#nameRouter').val();
+    var net = $('#netRouter').val();
     var dict = cy.json();
     dict["name"] = name;
+    dict["net"] = net;
     console.log(dict);
     $.ajax({
             url : "/api/router", // the endpoint
