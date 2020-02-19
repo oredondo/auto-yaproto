@@ -224,9 +224,11 @@ $(document).ready(function() {
 
 $(document).ready(function() {
   $("#deleteEdge").click(function() {
-    var name = $('#node').val();
+    var net_edge = $('#net_edge').val();
+    var router = $('#router').val();
     var dict = cy.json();
-    dict["name"] = name;
+    dict["net_edge"] = net_edge;
+    dict["router"] = router;
     console.log(dict);
     $.ajax({
             url : "/api/edge", // the endpoint
@@ -252,10 +254,10 @@ $(document).ready(function() {
 
 $(document).ready(function() {
   $("#addEdge").click(function() {
-    var node = $('#node').val();
+    var net_edge = $('#net_edge').val();
     var router = $('#router').val();
     var dict = cy.json();
-    dict["node"] = node;
+    dict["net_edge"] = net_edge;
     dict["router"] = router;
     console.log(dict);
     $.ajax({

@@ -117,19 +117,15 @@ class Elements(object):
                 "data": {
                     "color": '#000',
                     "source": 'router',
-                    "target": 'nodo1'
+                    "target": 'net1',
+                    "id": "elerouternet1"
                 }
             }, {
                 "data": {
                     "color": '#000',
                     "source": 'router',
-                    "target": 'nodo2'
-                }
-            }, {
-                "data": {
-                    "color": '#000',
-                    "source": 'router',
-                    "target": 'nodo3'
+                    "target": 'net0',
+                    "id": "elerouternet0"
                 }
             }]  ## edges
         }
@@ -197,35 +193,35 @@ class Edge(object):
         pass
 
     def put(self, data):
-        node = data.get("node")
+        net_edge = data.get("net_edge")
         router = data.get("router")
+        rut = False
+        net = False
         output = []
-        id = []
         for item in data.get("elements").get("nodes"):
-            if item.get("data").get("text") == node or \
-                    item.get("data").get("text") == router:
-                id.append(str(item.get("data").get("id")))
-        try:
-            output.append({"group": "edges", "data": {"color": "#000",
-                                                      "source": id[0],
-                                                      "target": id[1],
-                                                      "id": "ele" + id[0] + id[1]}})
-        except ValueError:
-            pass
+            if item.get("data").get("text") == router and item.get("data").get("text") != net_edge:
+                rut = True
+            if item.get("data").get("parent") == net_edge:
+                net = True
+            if net and rut:
+                break
+        if net and rut:
+            output = [{"group": "edges", "data": {"color": "#000",
+                                                  "source": router,
+                                                  "target": net_edge,
+                                                  "id": "ele{}{}".format(router, net_edge)}}]
 
         return output
 
     def delete(self, data):
-        name = data.get("name")
-        id = None
+        net_edge = data.get("net_edge")
+        router = data.get("router")
         idEdge = None
-        for item in data.get("elements").get("nodes"):
-            if item.get("data").get("text") == name:
-                id = str(item.get("data").get("id"))
 
         for item in data.get("elements").get("edges"):
-            if item.get("data").get("source") == id or item.get("data").get("target") == id:
+            if item.get("data").get("source") == router and item.get("data").get("target") == net_edge:
                 idEdge = item.get("data").get("id")
+
         return idEdge
 
 

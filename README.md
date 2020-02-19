@@ -36,6 +36,11 @@ ant jar
 2. jar cfm ProtocoloOSPFv2.jar manifestOSPFv2 -C /vagrant/data/yaproto/bin .
 3. sudo java -Djava.library.path=/vagrant/data/yaproto/lib -jar ProtocoloOSPFv2.jar
 sudo java -Djava.library.path=/vagrant/data/yaproto/lib -jar ProtocoloRIPv2.jar
+sudo java -Djava.library.path=/vagrant/data/yaproto/lib -jar /vagrant/data/builds/ProtocoloRIPv2.jar
+
+
+#ejecutar wireshark
+sudo tshark -i eth1
 
 # quitar gateway default
 

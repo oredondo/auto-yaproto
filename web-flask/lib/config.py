@@ -4,8 +4,9 @@ from netaddr import IPNetwork
 class Config(object):
 
     def __init__(self, data=None):
-        nets, routers = self.__get_nets(data)
-        self.config = self.__assign_ips(subnets=self.__get_subnets(), nets=nets, routers=routers)
+        nets, routers, gateways = self.__get_nets(data)
+        self.config = self.__assign_ips(subnets=self.__get_subnets(), nets=nets,
+                                        routers=routers, gateways=gateways)
 
     def get(self):
         return self.config
@@ -17,32 +18,21 @@ class Config(object):
         :return:
         """
         nets = {}
+        gateways = {}
         routers = []
-        i = 0
         for item in data.get("elements").get("nodes"):
             if "parent" in item.get("data").keys():
                 nets.setdefault(item.get("data").get("parent"), []).append(item.get("data").get("text"))
             if item.get("data").get("type") == "rectangle" and item.get("data").get("meta") != "net":
                 routers.append(item.get("data").get("text"))
+        for edge in data.get("elements").get("edges"):
+            if edge.get("data").get("source") not in nets[edge.get("data").get("target")]:
+                nets[edge.get("data").get("target")].append(edge.get("data").get("source"))
+                gateways[edge.get("data").get("target")] = edge.get("data").get("source")
 
-        for item in data.get("elements").get("edges"):
-            if item.get("data").get("source") in routers and not item.get("data").get("target") in routers:
-                for key, value in nets.items():
-                    if item.get("data").get("target") in value and not item.get("data").get("source") in value:
-                        nets[key].append(item.get("data").get("source"))
+        return nets, routers, gateways
 
-            if item.get("data").get("target") in routers and not item.get("data").get("source") in routers:
-                for key, value in nets.items():
-                    if item.get("data").get("source") in value and not item.get("data").get("target") in value:
-                        nets[key].append(item.get("data").get("target"))
-
-            if item.get("data").get("target") in routers and item.get("data").get("source") in routers:
-                i = i + 1
-                nets.setdefault("private" + str(i), []).append(item.get("data").get("source"))
-                nets.setdefault("private" + str(i), []).append(item.get("data").get("target"))
-        return nets, routers
-
-    def __assign_ips(self, subnets, nets, routers):
+    def __assign_ips(self, subnets, nets, routers, gateways):
         """
 
         :param subnets:
@@ -51,8 +41,7 @@ class Config(object):
         :return:
         """
         config = {"nodes": {},
-                  "routers": {},
-                  "gateways": {}}
+                  "routers": {}}
         red_aux = {}
 
         # genera diccionario con las redes y sus ips
@@ -61,45 +50,52 @@ class Config(object):
                 if value in red_aux.keys():
                     pass
                 else:
-                    try:
-                        red_aux[value] = []
-                        for i in subnets.pop(0):
-                            red_aux[value].append("%s" % i)
-                    except BaseException:
-                        pass  # TODO: Generar buenas excepciones
+                    red_aux[value] = {}
+                    red_aux[value]["ips"] = []
+                    subnets.pop(0)
+                    cont = 0
+                    for i in subnets.pop(0):
+                        if cont > 2:
+                            red_aux[value]["ips"].append("%s" % i)
+                        elif cont == 2:
+                            red_aux[value]["gateway"] = str(i)
+                        cont = cont + 1
 
         # genera dicionario de configuracion con nodos y routers con sus ips
+
         for value in nets:
             for item in nets[value]:
                 if item in routers:
-                    if item in config["routers"].keys():
-                        config["routers"][item].append(red_aux[value].pop(1))
+                    if item in config["routers"].keys() and gateways[value] == item:
+                        ip = red_aux[value]["gateway"]
+                        config["routers"][item].append({"ip": ip,
+                                                        "net": value,
+                                                        "gateway": ""})
                     else:
-                        config["routers"][item] = [red_aux[value].pop(1)]
-                        # gates = []
-                        # for i in nets[value]:
-                        #     if i != item:
-                        #         gates.append(i)
-                        # config["gateways"][config["routers"][item][0]] = gates
+                        config["routers"][item] = [{"ip": red_aux[value]["ips"].pop(-3),
+                                                    "net": value,
+                                                    "gateway": ""}]
                 else:
                     if item in config["nodes"].keys():
-                        config["nodes"][item].append(red_aux[value].pop(-3))
+                        config["nodes"][item].append({"ip": red_aux[value]["ips"].pop(-3),
+                                                      "net": value,
+                                                      "gateway": ""})
                     else:
-                        config["nodes"][item] = [red_aux[value].pop(-3)]
-        self.__gateways(nets, config)
+                        config["nodes"][item] = [{"ip": red_aux[value]["ips"].pop(-3),
+                                                  "net": value,
+                                                  "gateway": ""}]
+
+        for net in red_aux:
+            for item1 in config.get("nodes"):
+                for aux in config.get("nodes").get(item1):
+                    if aux.get("net") == net:
+                        aux["gateway"] = red_aux.get(net).get("gateway")
+
+            for item1 in config.get("routers"):
+                for aux in config.get("routers").get(item1):
+                    if aux.get("net") == net and aux.get("ip") != red_aux.get(net).get("gateway"):
+                        aux["gateway"] = red_aux.get(net).get("gateway")
         return config
-
-    def __gateways(self, nets, config):
-        """{'nodes': {'nodo1': ['172.24.0.253'], 'nodo2': ['172.24.0.252']},
-         'routers': {'router': ['172.24.0.1', '172.24.1.1', '172.24.2.1'], 'router2': ['172.24.1.2'],
-                     'router3': ['172.24.2.2']}, 'gateways': {}}
-
-        {'net1': ['nodo1', 'nodo2', 'router'], 'private1': ['router', 'router2'], 'private2': ['router', 'router3']}
-        """
-        for nodo in config.get("nodes"):
-            print(nodo)
-            for net in nets:
-                print(net)
 
     def __get_subnets(self):
         """

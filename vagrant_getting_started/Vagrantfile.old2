@@ -19,93 +19,75 @@ Vagrant.configure("2") do |config|
 
   config.vm.box = "centos/7"
 
-  
-  config.vm.define "nodo1" do |nodo1|
-    
-        nodo1.vm.network "private_network", ip: "172.24.3.253", virtualbox__intnet: true
-    
-  end
-  
-  config.vm.define "nodo2" do |nodo2|
-    
-        nodo2.vm.network "private_network", ip: "172.24.5.253", virtualbox__intnet: true
-    
-  end
-  
-  config.vm.define "nodo3" do |nodo3|
-    
-        nodo3.vm.network "private_network", ip: "172.24.5.252", virtualbox__intnet: true
-    
-  end
-  
-  config.vm.define "nod1" do |nod1|
-    
-        nod1.vm.network "private_network", ip: "172.24.7.253", virtualbox__intnet: true
-    
-  end
-  
 
-  
-  config.vm.define "router" do |router|
-    
-        router.vm.network "private_network", ip: "172.24.1.253", virtualbox__intnet: true
-    
-        router.vm.network "private_network", ip: "172.24.3.2", virtualbox__intnet: true
-    
-        router.vm.network "private_network", ip: "172.24.5.2", virtualbox__intnet: true
-    
-    
+  config.vm.define "nodo1" do |nodo1|
+
+        nodo1.vm.network "private_network", ip: "172.24.0.253", virtualbox__intnet: true
+
   end
-  
-  config.vm.define "router1" do |router1|
-    
-        router1.vm.network "private_network", ip: "172.24.1.252", virtualbox__intnet: true
-    
-        router1.vm.network "private_network", ip: "172.24.7.2", virtualbox__intnet: true
-    
-    
-        router1.vm.provision "ansible" do |ansible|
+
+  config.vm.define "nodo2" do |nodo2|
+
+        nodo2.vm.network "private_network", ip: "172.24.1.253", virtualbox__intnet: true
+
+  end
+
+  config.vm.define "nodo3" do |nodo3|
+
+        nodo3.vm.network "private_network", ip: "172.24.2.253", virtualbox__intnet: true
+
+  end
+
+
+
+  config.vm.define "router" do |router|
+
+        router.vm.network "private_network", ip: "172.24.0.1", virtualbox__intnet: true
+
+        router.vm.network "private_network", ip: "172.24.1.1", virtualbox__intnet: true
+
+        router.vm.network "private_network", ip: "172.24.3.1", virtualbox__intnet: true
+
+
+  end
+
+  config.vm.define "nuevo" do |nuevo|
+
+        nuevo.vm.network "private_network", ip: "172.24.2.1", virtualbox__intnet: true
+
+        nuevo.vm.network "private_network", ip: "172.24.3.2", virtualbox__intnet: true
+
+
+        nuevo.vm.provision "ansible" do |ansible|
               ansible.playbook       = "playbook.yml"
               ansible.limit          = "all"
               ansible.become = true
               ansible.groups = {
-                "nodes" => ["nodo1","nodo2","nodo3","nod1"],
-                "routers" => ["router","router1"]
+                "nodes" => ["nodo1","nodo2","nodo3"],
+                "routers" => ["router","nuevo"]
               }
               ansible.host_vars = {
-                
-                "nodo1" => {"gateway" => "172.24.3.2",
-                                 "ip" => "172.24.3.253",
-                                 "device" => "eth1"},
-                
-                "nodo2" => {"gateway" => "172.24.5.2",
-                                 "ip" => "172.24.5.253",
-                                 "device" => "eth1"},
-                
-                "nodo3" => {"gateway" => "172.24.5.2",
-                                 "ip" => "172.24.5.252",
-                                 "device" => "eth1"},
-                
-                "nod1" => {"gateway" => "172.24.7.2",
-                                 "ip" => "172.24.7.253",
-                                 "device" => "eth1"},
-                
-                
-                "router" => {"gateway" => "172.24.1.2",
-                                 "ip" => "172.24.1.253",
-                                 "device" => "eth1"},
-                
-                "router1" => {"gateway" => "172.24.1.2",
-                                 "ip" => "172.24.1.252",
-                                 "device" => "eth1"}
-                
-
+                "nodo1" => {"gateway" => "172.24.0.1",
+                            "ip" => "172.24.0.253",
+                            "device" => "eth1"},
+                "nodo2" => {"gateway" => "172.24.1.1",
+                            "ip" => "172.24.1.253",
+                            "device" => "eth1"},
+                "nodo3" => {"gateway" => "172.24.2.1",
+                            "ip" => "172.24.2.253",
+                            "device" => "eth1"},
+                "router" => {"gateway" => "172.24.3.2",
+                             "ip" => "172.24.3.1",
+                             "device" => "eth3"},
+                "nuevo" => {"gateway" => "172.24.3.1",
+                            "ip" => "172.24.3.2",
+                            "device" => "eth3"},
               }
 
         end
-    
+
   end
-  
+
 
 
   # Disable automatic box update checking. If you disable this, then

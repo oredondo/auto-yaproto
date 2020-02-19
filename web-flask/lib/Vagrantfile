@@ -22,7 +22,7 @@ Vagrant.configure("2") do |config|
   {% for item in nodes %}
   config.vm.define "{{ item }}" do |{{ item }}|
     {% for net in nodes[item] %}
-        {{ item }}.vm.network "private_network", ip: "{{ net }}", virtualbox__intnet: true
+        {{ item }}.vm.network "private_network", ip: "{{ net.ip }}", virtualbox__intnet: true
     {% endfor %}
   end
   {% endfor %}
@@ -30,7 +30,7 @@ Vagrant.configure("2") do |config|
   {% for item in routers %}
   config.vm.define "{{ item }}" do |{{ item }}|
     {% for net in routers[item] %}
-        {{ item }}.vm.network "private_network", ip: "{{ net }}", virtualbox__intnet: true
+        {{ item }}.vm.network "private_network", ip: "{{ net.ip }}", virtualbox__intnet: true
     {% endfor %}
     {% if loop.last %}
         {{ item }}.vm.provision "ansible" do |ansible|
@@ -40,6 +40,19 @@ Vagrant.configure("2") do |config|
               ansible.groups = {
                 "nodes" => [{% for item in nodes %}"{{ item }}"{% if not loop.last %},{% endif %}{% endfor %}],
                 "routers" => [{% for item in routers %}"{{ item }}"{% if not loop.last %},{% endif %}{% endfor %}]
+              }
+              ansible.host_vars = {
+                {% for nod in nodes %}
+                "{{ nod }}" => {% for var in nodes[nod] %}{"gateway" => "{{ var.gateway }}",
+                                 "ip" => "{{ var.ip }}",
+                                 "device" => "eth1"},{% endfor %}
+                {% endfor %}
+                {% for rout in routers %}
+                "{{ rout }}" => {% for var in routers[rout] %}{% if var.gateway != "" %}{"gateway" => "{{ var.gateway }}",
+                                 "ip" => "{{ var.ip }}",
+                                 "device" => "eth1"}{% endif %}{% endfor %}{% if not loop.last %},{% endif %}
+                {% endfor %}
+
               }
 
         end
