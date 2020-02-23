@@ -66,9 +66,13 @@ class Config(object):
         for value in nets:
             for item in nets[value]:
                 if item in routers:
-                    if item in config["routers"].keys() and gateways[value] == item:
+                    if item in config["routers"].keys() and gateways.get(value) == item:
                         ip = red_aux[value]["gateway"]
                         config["routers"][item].append({"ip": ip,
+                                                        "net": value,
+                                                        "gateway": ""})
+                    elif item in config["routers"].keys():
+                        config["routers"][item].append({"ip": red_aux[value]["ips"].pop(-3),
                                                         "net": value,
                                                         "gateway": ""})
                     else:

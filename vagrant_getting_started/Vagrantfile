@@ -38,12 +38,6 @@ Vagrant.configure("2") do |config|
     
   end
   
-  config.vm.define "nod1" do |nod1|
-    
-        nod1.vm.network "private_network", ip: "172.24.7.253", virtualbox__intnet: true
-    
-  end
-  
 
   
   config.vm.define "router" do |router|
@@ -55,22 +49,13 @@ Vagrant.configure("2") do |config|
         router.vm.network "private_network", ip: "172.24.5.2", virtualbox__intnet: true
     
     
-  end
-  
-  config.vm.define "router1" do |router1|
-    
-        router1.vm.network "private_network", ip: "172.24.1.252", virtualbox__intnet: true
-    
-        router1.vm.network "private_network", ip: "172.24.7.2", virtualbox__intnet: true
-    
-    
-        router1.vm.provision "ansible" do |ansible|
+        router.vm.provision "ansible" do |ansible|
               ansible.playbook       = "playbook.yml"
               ansible.limit          = "all"
               ansible.become = true
               ansible.groups = {
-                "nodes" => ["nodo1","nodo2","nodo3","nod1"],
-                "routers" => ["router","router1"]
+                "nodes" => ["nodo1","nodo2","nodo3"],
+                "routers" => ["router"]
               }
               ansible.host_vars = {
                 
@@ -86,17 +71,9 @@ Vagrant.configure("2") do |config|
                                  "ip" => "172.24.5.252",
                                  "device" => "eth1"},
                 
-                "nod1" => {"gateway" => "172.24.7.2",
-                                 "ip" => "172.24.7.253",
-                                 "device" => "eth1"},
-                
                 
                 "router" => {"gateway" => "172.24.1.2",
                                  "ip" => "172.24.1.253",
-                                 "device" => "eth1"},
-                
-                "router1" => {"gateway" => "172.24.1.2",
-                                 "ip" => "172.24.1.252",
                                  "device" => "eth1"}
                 
 
