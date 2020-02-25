@@ -56,7 +56,6 @@ class Elements(object):
                 "data": {
                     "id": "router",
                     "text": 'router',
-                    "parent": "netRouter",
                     "type": 'rectangle',
                     "color": "grey"
                 }
@@ -98,15 +97,6 @@ class Elements(object):
                     "data": {
                         "id": 'net1',
                         "text": 'net1',
-                        "meta": "net",
-                        "type": "rectangle",
-                        "color": "#D7D7D7"
-                    }
-                },
-                {
-                    "data": {
-                        "id": 'netRouter',
-                        "text": 'netRouter',
                         "meta": "net",
                         "type": "rectangle",
                         "color": "#D7D7D7"
@@ -199,9 +189,9 @@ class Edge(object):
         net = False
         output = []
         for item in data.get("elements").get("nodes"):
-            if item.get("data").get("text") == router and item.get("data").get("text") != net_edge:
+            if item.get("data").get("text") == router:
                 rut = True
-            if item.get("data").get("parent") == net_edge:
+            if item.get("data").get("parent") == net_edge or item.get("data").get("text") == net_edge:
                 net = True
             if net and rut:
                 break
@@ -234,47 +224,18 @@ class Router(object):
 
     def put(self, data):
         name = data.get("name")
-        net = data.get("net")
-        output = []
-        parent = None
-        id = None
-
-        for item in data.get("elements").get("nodes"):
-            if item.get("data").get("text") == name:
-                return []
-            if item.get("data").get("text") == net:
-                net = item.get("data").get("id")
-            if item.get("data").get("type") == "rectangle":
-                id = item.get("data").get("id")
-            if item.get("data").get("name") == net:
-                parent = item.get("data").get("id")
-        if parent is None:
-            output.append({"group": 'nodes', "data": {"id": str(net), "text": str(net), "meta": "net",
-                                                      "type": "rectangle", "color": "#D7D7D7"},
-                           "position": {"x": random.random() * 200, "y": random.random() * 200}})
-
-        output.append({"group": 'nodes', "data": {"id": str(name), "text": str(name),
-                                                  "type": "rectangle", "color": "grey", "parent": net},
-                       "position": {"x": random.random() * 200, "y": random.random() * 200}})
+        output = [{"group": 'nodes', "data": {"id": str(name), "text": str(name),
+                                              "type": "rectangle", "color": "grey"},
+                   "position": {"x": random.random() * 200, "y": random.random() * 200}}]
 
         return output
 
     def delete(self, data):
         name = data.get("name")
-        id = None
-        ok = True
-        net = None
         result = []
         for item in data.get("elements").get("nodes"):
             if item.get("data").get("text") == name and item.get("data").get("type") == "rectangle":
                 id = item.get("data").get("id")
                 result.append(id)
-                net = item.get("data").get("parent")
-
-        for other in data.get("elements").get("nodes"):
-            if net == other.get("data").get("parent") and id != other.get("data").get("id"):
-                ok = False
-        if ok:
-            result.append(net)
 
         return result

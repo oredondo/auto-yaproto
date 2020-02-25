@@ -22,19 +22,19 @@ Vagrant.configure("2") do |config|
   
   config.vm.define "nodo1" do |nodo1|
     
-        nodo1.vm.network "private_network", ip: "172.24.3.253", virtualbox__intnet: true
+        nodo1.vm.network "private_network", ip: "172.24.1.253", virtualbox__intnet: true
     
   end
   
   config.vm.define "nodo2" do |nodo2|
     
-        nodo2.vm.network "private_network", ip: "172.24.5.253", virtualbox__intnet: true
+        nodo2.vm.network "private_network", ip: "172.24.3.253", virtualbox__intnet: true
     
   end
   
   config.vm.define "nodo3" do |nodo3|
     
-        nodo3.vm.network "private_network", ip: "172.24.5.252", virtualbox__intnet: true
+        nodo3.vm.network "private_network", ip: "172.24.3.252", virtualbox__intnet: true
     
   end
   
@@ -42,38 +42,49 @@ Vagrant.configure("2") do |config|
   
   config.vm.define "router" do |router|
     
-        router.vm.network "private_network", ip: "172.24.1.253", virtualbox__intnet: true
+        router.vm.network "private_network", ip: "172.24.1.2", virtualbox__intnet: true
     
-        router.vm.network "private_network", ip: "172.24.3.2", virtualbox__intnet: true
-    
-        router.vm.network "private_network", ip: "172.24.5.2", virtualbox__intnet: true
+        router.vm.network "private_network", ip: "172.24.5.252", virtualbox__intnet: true
     
     
-        router.vm.provision "ansible" do |ansible|
+  end
+  
+  config.vm.define "router1" do |router1|
+    
+        router1.vm.network "private_network", ip: "172.24.3.2", virtualbox__intnet: true
+    
+        router1.vm.network "private_network", ip: "172.24.5.253", virtualbox__intnet: true
+    
+    
+        router1.vm.provision "ansible" do |ansible|
               ansible.playbook       = "playbook.yml"
               ansible.limit          = "all"
               ansible.become = true
               ansible.groups = {
                 "nodes" => ["nodo1","nodo2","nodo3"],
-                "routers" => ["router"]
+                "routers" => ["router","router1"]
               }
               ansible.host_vars = {
                 
-                "nodo1" => {"gateway" => "172.24.3.2",
+                "nodo1" => {"gateway" => "172.24.1.2",
+                                 "ip" => "172.24.1.253",
+                                 "device" => "eth1"},
+                
+                "nodo2" => {"gateway" => "172.24.3.2",
                                  "ip" => "172.24.3.253",
                                  "device" => "eth1"},
                 
-                "nodo2" => {"gateway" => "172.24.5.2",
-                                 "ip" => "172.24.5.253",
+                "nodo3" => {"gateway" => "172.24.3.2",
+                                 "ip" => "172.24.3.252",
                                  "device" => "eth1"},
                 
-                "nodo3" => {"gateway" => "172.24.5.2",
+                
+                "router" => {"gateway" => "172.24.5.253",
                                  "ip" => "172.24.5.252",
                                  "device" => "eth1"},
                 
-                
-                "router" => {"gateway" => "172.24.1.2",
-                                 "ip" => "172.24.1.253",
+                "router1" => {"gateway" => "172.24.5.252",
+                                 "ip" => "172.24.5.253",
                                  "device" => "eth1"}
                 
 

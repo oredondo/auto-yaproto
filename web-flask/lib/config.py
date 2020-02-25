@@ -26,9 +26,14 @@ class Config(object):
             if item.get("data").get("type") == "rectangle" and item.get("data").get("meta") != "net":
                 routers.append(item.get("data").get("text"))
         for edge in data.get("elements").get("edges"):
-            if edge.get("data").get("source") not in nets[edge.get("data").get("target")]:
+
+            if edge.get("data").get("source") not in nets.keys() and edge.get("data").get("target") not in routers:
                 nets[edge.get("data").get("target")].append(edge.get("data").get("source"))
                 gateways[edge.get("data").get("target")] = edge.get("data").get("source")
+            elif edge.get("data").get("target") not in nets.keys():
+                nets[edge.get("data").get("target") + "_$router$_" + edge.get("data").get("source")] = [
+                    edge.get("data").get("target"),
+                    edge.get("data").get("source")]
 
         return nets, routers, gateways
 
@@ -70,8 +75,8 @@ class Config(object):
                         ip = red_aux[value]["gateway"]
                         if item in config["routers"].keys():
                             config["routers"][item].append({"ip": ip,
-                                                        "net": value,
-                                                        "gateway": ""})
+                                                            "net": value,
+                                                            "gateway": ""})
                         else:
                             config["routers"][item] = [{"ip": ip,
                                                         "net": value,
@@ -103,8 +108,12 @@ class Config(object):
 
             for item1 in config.get("routers"):
                 for aux in config.get("routers").get(item1):
-                    if aux.get("net") == net and aux.get("ip") != red_aux.get(net).get("gateway"):
-                        aux["gateway"] = red_aux.get(net).get("gateway")
+                    if aux.get("net") == net and net not in gateways.keys():
+                        lista = net.split("_$router$_")
+                        lista.remove(item1)
+                        for i in config.get("routers").get(lista[0]):
+                            if i.get("net") == net:
+                                aux["gateway"] = i.get("ip")
         return config
 
     def __get_subnets(self):

@@ -18,3 +18,7 @@
 - name: Reboot a machine updates to apply
   reboot:
     reboot_timeout: 600
+- name: install the java 1.6 openjdk-devel
+  yum:
+    name: java-1.6.0-openjdk-devel
+    state: present

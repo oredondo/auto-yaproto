@@ -316,10 +316,8 @@ $(document).ready(function() {
 $(document).ready(function() {
   $("#addRouter").click(function() {
     var name = $('#nameRouter').val();
-    var net = $('#netRouter').val();
     var dict = cy.json();
     dict["name"] = name;
-    dict["net"] = net;
     console.log(dict);
     $.ajax({
             url : "/api/router", // the endpoint
