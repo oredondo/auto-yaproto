@@ -114,6 +114,14 @@ class Config(object):
                         for i in config.get("routers").get(lista[0]):
                             if i.get("net") == net:
                                 aux["gateway"] = i.get("ip")
+
+        for item2 in config.get("routers"):
+            notienegateway = True
+            for valor in config.get("routers").get(item2):
+                if valor.get("gateway") != "":
+                    notienegateway = False
+            if notienegateway:
+                config.get("routers").get(item2)[0]["gateway"] = config.get("routers").get(item2)[0]["ip"]
         return config
 
     def __get_subnets(self):
