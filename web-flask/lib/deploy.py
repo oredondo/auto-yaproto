@@ -19,7 +19,6 @@ class Deploy(object):
                                         "Vagrantfile")
 
         GenerateVagrantFile(template_path="Vagrantfile", vagrantfile_path=vagrantfile_path, config=conf)
-        print(conf)
         os.chdir(vagrantdir)
         cmd = ['vagrant', 'up']
         return self.run_command(cmd)

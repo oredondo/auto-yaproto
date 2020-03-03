@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+(function($) {
+    $.extend_if_has = function(desc, source, array) {
+        for (var i=array.length;i--;) {
+            if (typeof source[array[i]] != 'undefined') {
+                desc[array[i]] = source[array[i]];
+            }
+        }
+        return desc;
+    };
+    $.fn.dterm = function(interpeter, options) {
+        var defaults = Object.keys($.terminal.defaults);
+        var op = $.extend_if_has({}, options, defaults);
+
+        var term = this.append('<div/>').
+              terminal(interpeter, op);
+        if (!options.title) {
+            options.title = 'JQuery Terminal Emulator';
+        }
+        if (options.logoutOnClose) {
+            options.close = function(e, ui) {
+                term.logout();
+                term.clear();
+            };
+        } else {
+            options.close = function(e, ui) {
+                term.focus(false);
+            };
+        }
+        var self = this;
+        if (window.IntersectionObserver) {
+            var visibility_observer = new IntersectionObserver(function() {
+                if (self.is(':visible')) {
+                    terminal.enable().resize();
+                } else {
+                    self.disable();
+                }
+            }, {
+                root: document.body
+            });
+            visibility_observer.observe(terminal[0]);
+        }
+        this.dialog($.extend({}, options, {
+            resizeStop: function() {
+                var content = self.find('.ui-dialog-content');
+                terminal.resize(content.width(), content.height());
+            },
+            open: function(event, ui) {
+                if (!window.IntersectionObserver) {
+                    setTimeout(function() {
+                        terminal.enable().resize();
+                    }, 100);
+                }
+                if (typeof options.open == 'function') {
+                    options.open(event, ui);
+                }
+            },
+            show: 'fade',
+            closeOnEscape: false
+        }));
+        self.terminal = terminal;
+        return self;
+    };
+})(jQuery);
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.terminal/2.14.1/js/jquery.terminal.min.js"></script>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/jquery.terminal/2.14.1/css/jquery.terminal.min.css" rel="stylesheet"/>
+
+</body>
+</html>
+
