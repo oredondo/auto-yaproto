@@ -1,5 +1,6 @@
 import random
 
+puertos = 4203
 
 class Style(object):
     def __init__(self):
@@ -57,7 +58,8 @@ class Elements(object):
                     "id": "router",
                     "text": 'router',
                     "type": 'rectangle',
-                    "color": "grey"
+                    "color": "grey",
+                    "port": 4200
                 }
             }, {
                 "data": {
@@ -65,7 +67,8 @@ class Elements(object):
                     "text": 'nodo1',
                     "parent": 'net1',
                     "type": "ellipse",
-                    "color": "grey"
+                    "color": "grey",
+                    "port": 4201
                 }
             }, {
                 "data": {
@@ -73,7 +76,8 @@ class Elements(object):
                     "parent": 'net0',
                     "text": 'nodo2',
                     "type": "ellipse",
-                    "color": "grey"
+                    "color": "grey",
+                    "port": 4202
                 }
             }, {
                 "data": {
@@ -81,7 +85,8 @@ class Elements(object):
                     "parent": 'net0',
                     "text": 'nodo3',
                     "type": "ellipse",
-                    "color": "grey"
+                    "color": "grey",
+                    "port": 4203
                 }
             },
                 {
@@ -150,9 +155,10 @@ class Node(object):
 
         if parent is None:
             output.append({"group": 'nodes', "data": {"id": net, "text": net, "meta": "net",
+                                                      "puertos": puertos+1,
                                                       "type": "rectangle", "color": "#D7D7D7"}})
 
-        output.append({"group": 'nodes', "data": {"id": str(name), "text": str(name),
+        output.append({"group": 'nodes', "data": {"id": str(name), "text": str(name), "puertos": puertos+1,
                                                   "type": "ellipse", "color": "grey", "parent": net},
                        "position": {"x": random.random() * 200, "y": random.random() * 200}})
 
@@ -225,6 +231,7 @@ class Router(object):
     def put(self, data):
         name = data.get("name")
         output = [{"group": 'nodes', "data": {"id": str(name), "text": str(name),
+                                              "puertos": puertos + 1,
                                               "type": "rectangle", "color": "grey"},
                    "position": {"x": random.random() * 200, "y": random.random() * 200}}]
 

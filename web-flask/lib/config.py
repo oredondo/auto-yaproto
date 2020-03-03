@@ -4,9 +4,9 @@ from netaddr import IPNetwork
 class Config(object):
 
     def __init__(self, data=None):
-        nets, routers, gateways = self.__get_nets(data)
+        nets, routers, gateways, puertos = self.__get_nets(data)
         self.config = self.__assign_ips(subnets=self.__get_subnets(), nets=nets,
-                                        routers=routers, gateways=gateways)
+                                        routers=routers, gateways=gateways, puertos=puertos)
 
     def get(self):
         return self.config
@@ -19,14 +19,17 @@ class Config(object):
         """
         nets = {}
         gateways = {}
+        puertos = {}
         routers = []
         for item in data.get("elements").get("nodes"):
+
             if "parent" in item.get("data").keys():
+                puertos[item.get("data").get("text")] = item.get("data").get("port")
                 nets.setdefault(item.get("data").get("parent"), []).append(item.get("data").get("text"))
             if item.get("data").get("type") == "rectangle" and item.get("data").get("meta") != "net":
+                puertos[item.get("data").get("text")] = item.get("data").get("port")
                 routers.append(item.get("data").get("text"))
         for edge in data.get("elements").get("edges"):
-
             if edge.get("data").get("source") not in nets.keys() and edge.get("data").get("target") not in routers:
                 nets[edge.get("data").get("target")].append(edge.get("data").get("source"))
                 gateways[edge.get("data").get("target")] = edge.get("data").get("source")
@@ -35,9 +38,9 @@ class Config(object):
                     edge.get("data").get("target"),
                     edge.get("data").get("source")]
 
-        return nets, routers, gateways
+        return nets, routers, gateways, puertos
 
-    def __assign_ips(self, subnets, nets, routers, gateways):
+    def __assign_ips(self, subnets, nets, routers, gateways, puertos):
         """
 
         :param subnets:
@@ -104,6 +107,7 @@ class Config(object):
             for item1 in config.get("nodes"):
                 for aux in config.get("nodes").get(item1):
                     if aux.get("net") == net:
+                        aux["puerto"] = puertos.get(item1)
                         aux["gateway"] = red_aux.get(net).get("gateway")
 
             for item1 in config.get("routers"):
@@ -114,6 +118,7 @@ class Config(object):
                         for i in config.get("routers").get(lista[0]):
                             if i.get("net") == net:
                                 aux["gateway"] = i.get("ip")
+                                aux["puerto"] = puertos.get(item1)
 
         for item2 in config.get("routers"):
             notienegateway = True
@@ -122,7 +127,9 @@ class Config(object):
                     notienegateway = False
             if notienegateway:
                 config.get("routers").get(item2)[0]["gateway"] = config.get("routers").get(item2)[0]["ip"]
+                config.get("routers").get(item2)[0]["puerto"] = puertos.get(item2)
         return config
+
 
     def __get_subnets(self):
         """
