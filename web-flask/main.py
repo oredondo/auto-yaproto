@@ -11,6 +11,17 @@ parser = reqparse.RequestParser()
 parser.add_argument('hola')
 
 
+class Puertos(object):
+
+    def __init__(self):
+        self.port = 4203
+
+    def get(self):
+        self.port = self.port + 1
+        return self.port
+
+puerto = Puertos()
+
 @app.route("/")
 def hello():
     return render_template("index.html")
@@ -46,7 +57,8 @@ class ViewNode(Resource):
         return out
 
     def put(self):
-        data = Node().put(request.json)
+
+        data = Node().put(request.json, puerto.get())
         return data, 200
 
     def delete(self):
@@ -79,7 +91,7 @@ class ViewRouter(Resource):
         return out
 
     def put(self):
-        data = Router().put(request.json)
+        data = Router().put(request.json, puerto.get())
         return data, 200
 
     def delete(self):
@@ -97,7 +109,7 @@ class ViewDeploy(Resource):
         return "ok", 200
 
     def get(self):
-        data ={}
+        data = {}
         stream_with_context(Deploy(data).run())
         return Response()
 

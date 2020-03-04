@@ -19,7 +19,7 @@ function callStyle(theResponse) {
             }
       });
 }
-
+var deploy = false
 var style = callStyle();
 
 function callElements(theResponse) {
@@ -103,6 +103,9 @@ $(function() {
     $("#node-operation").show();
 
     var target = evt.cyTarget;
+    if(target["_private"]["data"]["color"] == "grey" && deploy) {
+        window.open("https://127.0.0.1:" + target["_private"]["data"]["port"]);
+    }
     console.log('select ' + target.id(), target);
     $("#selected").text("Selected:" + target.id());
   }
@@ -353,6 +356,7 @@ $(document).ready(function() {
             // handle a non-successful response
             success: function( data ) {
                var stream = new GetSteam();
+               deploy = true
             }
       });
   });

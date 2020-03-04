@@ -1,6 +1,5 @@
 import random
 
-puertos = 4203
 
 class Style(object):
     def __init__(self):
@@ -136,7 +135,7 @@ class Node(object):
     def get(self):
         pass
 
-    def put(self, data):
+    def put(self, data, puertos):
         name = data.get("name")
         net = data.get("net")
         output = []
@@ -155,12 +154,13 @@ class Node(object):
 
         if parent is None:
             output.append({"group": 'nodes', "data": {"id": net, "text": net, "meta": "net",
-                                                      "puertos": puertos+1,
+                                                      "port": puertos,
                                                       "type": "rectangle", "color": "#D7D7D7"}})
 
-        output.append({"group": 'nodes', "data": {"id": str(name), "text": str(name), "puertos": puertos+1,
+        output.append({"group": 'nodes', "data": {"id": str(name), "text": str(name), "port": puertos,
                                                   "type": "ellipse", "color": "grey", "parent": net},
                        "position": {"x": random.random() * 200, "y": random.random() * 200}})
+
 
         return output
 
@@ -228,10 +228,10 @@ class Router(object):
     def get(self):
         pass
 
-    def put(self, data):
+    def put(self, data, puertos):
         name = data.get("name")
         output = [{"group": 'nodes', "data": {"id": str(name), "text": str(name),
-                                              "puertos": puertos + 1,
+                                              "port": puertos,
                                               "type": "rectangle", "color": "grey"},
                    "position": {"x": random.random() * 200, "y": random.random() * 200}}]
 
