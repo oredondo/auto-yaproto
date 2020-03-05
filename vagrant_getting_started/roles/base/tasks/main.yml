@@ -61,3 +61,6 @@
     mode: 0440
     create: yes
     validate: 'visudo -cf %s'
+
+- name: Ensure hostname set
+  hostname: name={{ inventory_hostname }}
