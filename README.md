@@ -66,3 +66,5 @@ ansible.host_vars = {
               "ip" => "172.24.3.2",
               "device" => "eth3"},
 }
+
+vagrant ssh router -c "sudo java -Djava.library.path=/vagrant/data/yaproto/lib -jar /vagrant/data/builds/ProtocoloRIPv2.jar"

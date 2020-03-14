@@ -6,9 +6,11 @@ var lastResponseLength = false;
 
 function GetSteam() {
     $(document).ready(function() {
-       refreshIntervalId = window.setInterval(function() {
-            Stream(); //Pass Data Here...!!!
-        }, 150); //Call every 0.5 min
+        var refreshIntervalId = window.setInterval(function() {
+            return Stream(); //Pass Data Here...!!!
+        }, 25); //Call every 0.5 min
+
+
     });
 }
 
@@ -19,7 +21,12 @@ function Stream() {
             dataType: 'text',
             success:  function(e)
                 {
-                     $('#progressTest').append("<p><kbd>"+ e + "</kbd></p>" );
+                    if(e==''){
+                        return clearInterval(refreshIntervalId);
+                    }
+                    else {
+                        $('#progressTest').append("<p><kbd>" + e + "</kbd></p>");
+                    }
 
                 },
             error : function() {
