@@ -347,22 +347,68 @@ $(document).ready(function() {
   $("#deploy").click(function() {
     var dict = cy.json();
     console.log(dict);
+    var last_response_len = false;
     $.ajax({
             url : "/api/deploy", // the endpoint
             type : "PUT", // http method
             data: JSON.stringify(dict),
             contentType: "application/json",
-            dataType: 'json',
-            // handle a non-successful response
-            success: function( data ) {
-               var stream = new GetSteam();
-               deploy = true
+            dataType: 'text',
+            xhrFields: {
+                onprogress: function(e)
+                {
+                    var this_response, response = e.currentTarget.response;
+                    if(last_response_len === false)
+                    {
+                        this_response = response;
+                        last_response_len = response.length;
+                    }
+                    else
+                    {
+                        this_response = response.substring(last_response_len);
+                        last_response_len = response.length;
+                    }
+                    deploy = true;
+                    $('#progressTest').append( "<p style='color:#f8f9ff'; >"+ this_response + "</p>" );
+
+                }
             }
       });
   });
 });
 
+$(document).ready(function() {
+  $("#destroy").click(function() {
+    var dict = cy.json();
+    console.log(dict);
+    var last_response_len = false;
+    $.ajax({
+            url : "/api/destroy", // the endpoint
+            type : "PUT", // http method
+            data: JSON.stringify(dict),
+            contentType: "application/json",
+            dataType: 'text',
+            xhrFields: {
+                onprogress: function(e)
+                {
+                    var this_response, response = e.currentTarget.response;
+                    if(last_response_len === false)
+                    {
+                        this_response = response;
+                        last_response_len = response.length;
+                    }
+                    else
+                    {
+                        this_response = response.substring(last_response_len);
+                        last_response_len = response.length;
+                    }
+                    $('#progressTestDestroy').append( "<p style='color:#f8f9ff'; >"+ this_response + "</p>" );
 
+                }
+            }
+      });
+  });
+});
 
 
 

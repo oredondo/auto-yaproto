@@ -2,49 +2,47 @@ from lib.config import Config
 from lib.generateVagrantFile import GenerateVagrantFile
 import os
 import subprocess
-import logging
-from lib.lib_vagrant.vagrant_params import Vagrant_Params
-from lib.lib_vagrant.vagrant_interface import Vagrant_Interface
+import json
 
-process = None
+pope = None
 
 class Deploy(object):
 
     def __init__(self, data=None):
-        self.data = data
-        self.params = Vagrant_Params()
-        self.interface = Vagrant_Interface()
-
-        logging.info("TEST log")
-        self.logger.setLevel(logging.DEBUG)
+        self.data = json.loads(data)
+        self.cmd = ['vagrant']
+        self.vagrantdir = os.getcwd().replace("web-flask", "vagrant_getting_started")
+        os.chdir(self.vagrantdir)
 
     def run(self):
-
         conf = Config(data=self.data).get()
-        vagrantdir = os.getcwd().replace("web-flask", "vagrant_getting_started")
-        vagrantfile_path = os.path.join(vagrantdir,
+        vagrantfile_path = os.path.join(self.vagrantdir,
                                         "Vagrantfile")
-
         GenerateVagrantFile(template_path="Vagrantfile", vagrantfile_path=vagrantfile_path, config=conf)
-        os.chdir(vagrantdir)
-        self.params.destroy = True
-        cmd = ['vagrant', 'up']
-        return self.run_command(cmd)
 
-    def run_command(self, command):
-        global process
-        process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        return process
+        self.cmd.append('up')
+        return self._run_command()
 
+    def destroy(self):
+        self.cmd.extend(["destroy", "-f"])
+        return self._run_command()
+
+    def run_rip(self, name):
+        command = "sudo java -Djava.library.path=/vagrant/data/yaproto/lib -jar /vagrant/data/builds/ProtocoloRIPv2.jar"
+        self.cmd.extend(["ssh", name, "-c", command])
+        return self._run_command()
+
+    def _run_command(self):
+        global pope
+        pope = subprocess.Popen(self.cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                                universal_newlines=True)
+        return pope
 
     def stream(self):
         def generate():
-            global process
-            retcode = process.poll()  # returns None while subprocess is running
-            line = process.stdout.readline()
-            print(line)
-            yield line
-            if (retcode is not None):
-                return
+            for item in iter(pope.stdout.readline, ""):
+                yield str(item.rstrip('\n'))
+
         return generate()
 
+        # sleep(1)

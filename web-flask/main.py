@@ -20,7 +20,9 @@ class Puertos(object):
         self.port = self.port + 1
         return self.port
 
+
 puerto = Puertos()
+
 
 @app.route("/")
 def hello():
@@ -57,7 +59,6 @@ class ViewNode(Resource):
         return out
 
     def put(self):
-
         data = Node().put(request.json, puerto.get())
         return data, 200
 
@@ -102,28 +103,37 @@ class ViewRouter(Resource):
 api.add_resource(ViewRouter, '/api/router')
 
 
+def stream_template(template_name, **context):
+    app.update_template_context(context)
+    t = app.jinja_env.get_template(template_name)
+    rv = t.stream(context)
+    rv.disable_buffering()
+    return rv
+
+
 class ViewDeploy(Resource):
 
     def put(self):
-        out = Deploy(request.json).run()
-        return "ok", 200
+        out = Deploy(request.data)
+        out.run()
+        rows = out.stream()
+        return Response(stream_with_context(rows))
 
-    def get(self):
-        data = {}
-        stream_with_context(Deploy(data).run())
-        return Response()
+
 
 api.add_resource(ViewDeploy, '/api/deploy')
 
 
-class ViewStream(Resource):
+class ViewDestroy(Resource):
 
-    def get(self):
-        dato = Deploy().stream()
-        return Response(stream_with_context(dato), 200)
+    def put(self):
+        out = Deploy(request.data)
+        out.destroy()
+        rows = out.stream()
+        return Response(stream_with_context(rows))
 
-api.add_resource(ViewStream, '/api/stream')
 
+api.add_resource(ViewDestroy, '/api/destroy')
 
 if __name__ == '__main__':
     app.run(debug=True, use_debugger=True, use_reloader=True, passthrough_errors=True)
