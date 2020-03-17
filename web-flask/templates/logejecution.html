@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ name }}</title>
+</head>
+<body>
+<div class="form-group" id="ripDiv">
+</div>
+</body>
+<script src="../statics/js/jquery.js"></script>
+
+<script>
+
+var last_response_len = false;
+    $.ajax({
+            url: "/api/runrip", // the endpoint
+            type: "PUT", // http method
+            data: JSON.stringify({name: "{{ name }}"}),
+            contentType: "application/json",
+            dataType: 'text',
+            xhrFields: {
+                onprogress: function (e) {
+                    var this_response, response = e.currentTarget.response;
+                    if (last_response_len === false) {
+                        this_response = response;
+                        last_response_len = response.length;
+                    } else {
+                        this_response = response.substring(last_response_len);
+                        last_response_len = response.length;
+                    }
+
+                 $('#ripDiv').append("<p>" + this_response + "</p>");
+                }
+            }
+        });
+</script>
+
+</html>

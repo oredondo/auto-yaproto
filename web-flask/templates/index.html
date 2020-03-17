@@ -7,7 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Simple Sidebar - Start Bootstrap Template</title>
+    <title>Auto Yaproto</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="../statics/css/bootstrap.min.css" rel="stylesheet">
@@ -56,6 +56,11 @@
                             <li>
                                 <a href="#" data-toggle="modal" data-target="#myModal5">
                                     Destroy
+                                 </a>
+                            </li>
+                            <li>
+                                <a href="#" id="checkNames" data-toggle="modal" data-target="#myModal6">
+                                    Rip
                                  </a>
                             </li>
                             <li>
@@ -130,7 +135,7 @@
 
                 <!-- Modal body -->
                 <div class="modal-body">
-                        <form action="/action_page.php">
+                        <form>
                           <div class="form-group">
                             <label for="router">Router:</label>
                             <input type="text" class="form-control" id="router">
@@ -164,7 +169,7 @@
 
                 <!-- Modal body -->
                 <div class="modal-body">
-                        <form action="/action_page.php">
+                        <form>
                           <div class="form-group">
                             <label for="router">Router:</label>
                             <input type="text" class="form-control" id="nameRouter">
@@ -183,7 +188,7 @@
             </div>
           </div>
 
-
+        <!-- The Modal Deploy -->
           <div class="modal fade" id="myModal4">
             <div class="modal-dialog">
               <div class="modal-content">
@@ -214,13 +219,14 @@
             </div>
           </div>
 
+        <!-- The Modal Destroy -->
           <div class="modal fade" id="myModal5">
             <div class="modal-dialog">
               <div class="modal-content">
 
                 <!-- Modal Header -->
                 <div class="modal-header">
-                  <h4 class="modal-title">Deploy</h4>
+                  <h4 class="modal-title">Destroy</h4>
                   <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
 
@@ -237,6 +243,36 @@
 
                 <!-- Modal footer -->
                 <div class="modal-footer">
+                  <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+        <!-- The Modal Rip -->
+          <div class="modal fade" id="myModal6">
+            <div class="modal-dialog">
+              <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                  <h4 class="modal-title">Run RIP</h4>
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                        <form>
+                          <h5 class="text-center ">Check if you want to see the  RIP log</h5>
+                          <div class="form-group" id="ripDiv">
+                          </div>
+                        </form>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                  <button type="submit" class="btn btn-primary" data-dismiss="modal" id="runRip">run</button>
                   <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                 </div>
 

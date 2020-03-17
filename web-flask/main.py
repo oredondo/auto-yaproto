@@ -120,7 +120,6 @@ class ViewDeploy(Resource):
         return Response(stream_with_context(rows))
 
 
-
 api.add_resource(ViewDeploy, '/api/deploy')
 
 
@@ -134,6 +133,24 @@ class ViewDestroy(Resource):
 
 
 api.add_resource(ViewDestroy, '/api/destroy')
+
+
+class ViewRunRip(Resource):
+
+    def put(self):
+        out = Deploy(request.data)
+        out.run_rip()
+        rows = out.stream()
+        return Response(stream_with_context(rows))
+
+
+api.add_resource(ViewRunRip, '/api/runrip')
+
+
+@app.route('/logrip<name>')
+def landing_page(name):
+    return render_template("logejecution.html", name=name)
+
 
 if __name__ == '__main__':
     app.run(debug=True, use_debugger=True, use_reloader=True, passthrough_errors=True)

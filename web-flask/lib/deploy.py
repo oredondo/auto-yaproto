@@ -27,9 +27,11 @@ class Deploy(object):
         self.cmd.extend(["destroy", "-f"])
         return self._run_command()
 
-    def run_rip(self, name):
+    def run_rip(self):
+        name = self.data.get("name")
         command = "sudo java -Djava.library.path=/vagrant/data/yaproto/lib -jar /vagrant/data/builds/ProtocoloRIPv2.jar"
         self.cmd.extend(["ssh", name, "-c", command])
+        # self.cmd = ["pwd"]
         return self._run_command()
 
     def _run_command(self):
