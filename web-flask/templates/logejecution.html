@@ -4,14 +4,17 @@
     <meta charset="UTF-8">
     <title>{{ name }}</title>
 </head>
-<body>
+
+<body style='background-color: #333' >
 <div class="form-group" id="ripDiv">
+</div>
+<div id="endpoint">
 </div>
 </body>
 <script src="../statics/js/jquery.js"></script>
 
-<script>
 
+<script>
 var last_response_len = false;
     $.ajax({
             url: "/api/runrip", // the endpoint
@@ -30,10 +33,13 @@ var last_response_len = false;
                         last_response_len = response.length;
                     }
 
-                 $('#ripDiv').append("<p>" + this_response + "</p>");
+                 $('#ripDiv').append( this_response );
+                $("html, body").animate({ scrollTop: $(document).height() }, 1000);
+
                 }
             }
         });
+
 </script>
 
 </html>

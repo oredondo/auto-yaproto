@@ -360,8 +360,8 @@ $(function () {
                             last_response_len = response.length;
                         }
                         deploy = true;
-                        $('#progressTest').append("<p style='color:#f8f9ff'; >" + this_response + "</p>");
-
+                        $('#progressTest').append(this_response);
+                        $('body,html,div').animate({ scrollTop: $('#progressTest').height()}, 800);
                     }
                 }
             });
@@ -389,14 +389,14 @@ $(function () {
                             this_response = response.substring(last_response_len);
                             last_response_len = response.length;
                         }
-                        $('#progressTestDestroy').append("<p style='color:#f8f9ff'; >" + this_response + "</p>");
+                        $('#progressTestDestroy').append(this_response);
 
                     }
                 }
             });
         });
     });
-
+$("html, body").animate({ scrollTop: $(document).height() }, 1000);
 
 // #####RUN RIP##########
     $(document).ready(function () {

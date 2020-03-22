@@ -31,7 +31,6 @@ class Deploy(object):
         name = self.data.get("name")
         command = "sudo java -Djava.library.path=/vagrant/data/yaproto/lib -jar /vagrant/data/builds/ProtocoloRIPv2.jar"
         self.cmd.extend(["ssh", name, "-c", command])
-        # self.cmd = ["pwd"]
         return self._run_command()
 
     def _run_command(self):
@@ -43,7 +42,7 @@ class Deploy(object):
     def stream(self):
         def generate():
             for item in iter(pope.stdout.readline, ""):
-                yield str(item.rstrip('\n'))
+                yield str("<p style='color:#f8f9ff'; >" + item + "</p>")
 
         return generate()
 
