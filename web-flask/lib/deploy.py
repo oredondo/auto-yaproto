@@ -29,7 +29,7 @@ class Deploy(object):
 
     def run_rip(self):
         name = self.data.get("name")
-        command = "sudo java -Djava.library.path=/vagrant/data/yaproto/lib -jar /vagrant/data/builds/ProtocoloRIPv2.jar"
+        command = "sudo java -Djava.library.path=/vagrant/data/lib -jar /vagrant/data/builds/ProtocoloRIPv2.jar"
         self.cmd.extend(["ssh", name, "-c", command])
         return self._run_command()
 
