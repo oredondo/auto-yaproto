@@ -1,70 +1,32 @@
-# auto-yaproto
-/usr/bin/make -f /vagrant/data/yaproto/Makefile all
+# AutoYaproto
+
+_Proyecto para la enseñanza educativa de Redes, y poder probar protocolos de encaminamiento RIPv2
+Basandonos en el proyecto yaproto https://github.com/javierrledesma/yaproto_
 
 
-java -Djava.library.path=/vagrant/data/yaproto/lib  -classpath /vagrant/data/yaproto/lib/slf4j-api-1.6.6.jar:/vagrant/data/yaproto/lib/slf4j-jdk14-1.6.6.jar:/vagrant/data/yaproto/bin msti.ospfv2.ProtocoloOSPFv2
+### Pre-requisitos 📋
 
-sudo java -Djava.library.path=/vagrant/data/yaproto/lib  -classpath /vagrant/data/yaproto/lib/slf4j-api-1.6.6.jar:/vagrant/data/yaproto/lib/slf4j-jdk14-1.6.6.jar:/vagrant/data/yaproto/bin msti.rip.ProtocoloRIPv2
+_Necesitamos tener instalado la version de **Python 3.6** ademas de pip3_
 
-jni.cc=gcc -I/usr/lib/jvm/java-1.6.0-openjdk-1.6.0.41.x86_64/include -I/usr/lib/jvm/java-1.6.0-openjdk-1.6.0.41.x86_64/include/linux -nostartfiles
+_Install Pip3 Ubuntu_
+```
+sudo apt-get install python3-pip
 
-Install gcc and wget
-# download and install
-antversion=1.9.13
-wget http://archive.apache.org/dist/ant/binaries/apache-ant-${antversion}-bin.tar.gz
-sudo tar xvfvz apache-ant-${antversion}-bin.tar.gz -C /opt
-sudo ln -sfn /opt/apache-ant-${antversion} /opt/ant
-sudo sh -c 'echo ANT_HOME=/opt/ant >> /etc/environment'
-sudo ln -sfn /opt/ant/bin/ant /usr/bin/ant
+```
 
-# check installation
-ant -version
+_Install Pip3 CentOS_
+```
+sudo yum install epel-release
+sudo yum install python3-pip
 
-#cleanup
-rm apache-ant-${antversion}-bin.tar.gz
+```
 
-ant -Djni.cc='gcc -m64'
-ant -Djni.cc='gcc -m64 -I/usr/lib/jvm/java-1.8.0/include -I/usr/lib/jvm/java-1.8.0/include/linux -Wall'
+### Instalación 🔧
 
+_Una vez instalado python 3.6 procederemos a crear un entorno virtual._
 
-ant jar
+_Podemos hacerlo con el siguiente script_
 
-
-# Create jar
-
-1. Create manifest
-2. jar cfm ProtocoloOSPFv2.jar manifestOSPFv2 -C /vagrant/data/yaproto/bin .
-3. sudo java -Djava.library.path=/vagrant/data/yaproto/lib -jar ProtocoloOSPFv2.jar
-sudo java -Djava.library.path=/vagrant/data/yaproto/lib -jar ProtocoloRIPv2.jar
-sudo java -Djava.library.path=/vagrant/data/yaproto/lib -jar /vagrant/data/builds/ProtocoloRIPv2.jar
-
-
-#ejecutar wireshark
-sudo tshark -i eth1
-
-# quitar gateway default
-
-sudo route del default gw 10.0.2.2
-sudo route add default gw 192.168.100.2
-sudo sysctl -w net.ipv4.ip_forward=1
-sudo systemctl stop chronyd
-
-ansible.host_vars = {
-  "nodo1" => {"gateway" => "172.24.0.1",
-              "ip" => "172.24.0.253",
-              "device" => "eth1"},
-  "nodo2" => {"gateway" => "172.24.1.1",
-              "ip" => "172.24.1.253",
-              "device" => "eth1"},
-  "nodo3" => {"gateway" => "172.24.2.1",
-              "ip" => "172.24.2.253",
-              "device" => "eth1"},
-  "router" => {"gateway" => "172.24.3.2",
-               "ip" => "172.24.3.1",
-               "device" => "eth3"},
-  "nuevo" => {"gateway" => "172.24.3.1",
-              "ip" => "172.24.3.2",
-              "device" => "eth3"},
-}
-
-vagrant ssh router -c "sudo java -Djava.library.path=/vagrant/data/yaproto/lib -jar /vagrant/data/builds/ProtocoloRIPv2.jar"
+```
+sh script_instalacion.sh
+```
