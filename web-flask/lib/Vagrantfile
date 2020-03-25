@@ -41,7 +41,7 @@ Vagrant.configure("2") do |config|
     {% endfor %}
     {% if loop.last %}
         {{ item }}.vm.provision "ansible" do |ansible|
-              ansible.playbook       = "playbook.yml"
+              ansible.playbook       = "provisioning/playbook.yml"
               ansible.limit          = "all"
               ansible.become = true
               ansible.groups = {

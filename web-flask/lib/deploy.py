@@ -11,7 +11,7 @@ class Deploy(object):
     def __init__(self, data=None):
         self.data = json.loads(data)
         self.cmd = ['vagrant']
-        self.vagrantdir = os.getcwd().replace("web-flask", "vagrant_getting_started")
+        self.vagrantdir = os.getcwd().replace("web-flask", "")
         os.chdir(self.vagrantdir)
 
     def run(self):
