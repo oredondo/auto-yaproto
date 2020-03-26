@@ -6,7 +6,7 @@ _Basandonos en el proyecto yaproto https://github.com/javierrledesma/yaproto_
 _Con esta web podremos diseñar nuestro propio laboratorio y ejecutar el protocolo de encaminamiento_
 
 
-### Pre-requisitos 📋
+### Pre-requisitos
 _Pasos probados para Ubuntu 18.04.4 LTS_
 _Para otros sistemas operativos importante tener instalado **Python 3.6**_
 
@@ -65,5 +65,5 @@ python3.6 web-flask/main.py FLASK_APP=main.py flask run
 _Ahora podremos entrar en la web atraves del siguiente enlace_
 
 ```
-auto-yaproto
+http://127.0.0.1:5000
 ```
