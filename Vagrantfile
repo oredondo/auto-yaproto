@@ -19,6 +19,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.box = "centos/7"
   config.vm.box_version = "1809.01"
+  config.vm.synced_folder  "provisioning" , "/vagrant"
 
   
   config.vm.define "nodo1" do |nodo1|
