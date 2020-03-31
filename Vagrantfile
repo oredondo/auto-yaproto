@@ -70,6 +70,7 @@ Vagrant.configure("2") do |config|
                 "nodes" => ["nodo1","nodo2","nodo3"],
                 "routers" => ["router"]
               }
+              ansible.extra_vars = {"ips" => ["172.24.1.253","172.24.3.253","172.24.3.252","172.24.1.2","172.24.3.2"]}
               ansible.host_vars = {
                 
                 "nodo1" => {"gateway" => "172.24.1.2",

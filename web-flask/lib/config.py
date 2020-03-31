@@ -51,7 +51,7 @@ class Config(object):
         config = {"nodes": {},
                   "routers": {}}
         red_aux = {}
-
+        allips = []
         # genera diccionario con las redes y sus ips
         for value in nets:
             for item in nets[value]:
@@ -106,12 +106,16 @@ class Config(object):
         for net in red_aux:
             for item1 in config.get("nodes"):
                 for aux in config.get("nodes").get(item1):
+                    if aux.get("ip") not in allips:
+                        allips.append(aux.get("ip"))
                     if aux.get("net") == net:
                         aux["puerto"] = puertos.get(item1)
                         aux["gateway"] = red_aux.get(net).get("gateway")
 
             for item1 in config.get("routers"):
                 for aux in config.get("routers").get(item1):
+                    if aux.get("ip") not in allips:
+                        allips.append(aux.get("ip"))
                     if aux.get("net") == net and net not in gateways.keys():
                         lista = net.split("_$router$_")
                         lista.remove(item1)
@@ -128,6 +132,7 @@ class Config(object):
             if notienegateway:
                 config.get("routers").get(item2)[0]["gateway"] = config.get("routers").get(item2)[0]["ip"]
                 config.get("routers").get(item2)[0]["puerto"] = puertos.get(item2)
+        config["ips"] = allips
         return config
 
 
