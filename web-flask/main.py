@@ -3,6 +3,7 @@ from flask import render_template
 from flask_restful import Resource, Api, reqparse
 from lib.actions import Style, Elements, Node, Edge, Router
 from lib.deploy import Deploy
+from lib.get_ips import GetIps
 from flask import stream_with_context, request, Response
 
 app = Flask(__name__, static_folder='statics')
@@ -123,6 +124,15 @@ class ViewDeploy(Resource):
 api.add_resource(ViewDeploy, '/api/deploy')
 
 
+class ViewGetIps(Resource):
+
+    def put(self):
+        geting = GetIps(request.data)
+        out = geting.get()
+        return out, 200
+
+api.add_resource(ViewGetIps, '/api/getips')
+
 class ViewDestroy(Resource):
 
     def put(self):
@@ -147,10 +157,24 @@ class ViewRunRip(Resource):
 api.add_resource(ViewRunRip, '/api/runrip')
 
 
+class ViewRunOspf(Resource):
+
+    def put(self):
+        out = Deploy(request.data)
+        out.run_ospf()
+        rows = out.stream()
+        return Response(stream_with_context(rows))
+
+
+api.add_resource(ViewRunOspf, '/api/runospf')
+
 @app.route('/logrip<name>')
 def landing_page(name):
     return render_template("logejecution.html", name=name)
 
+@app.route('/logospf&<name>&<local_ips>&<all_ips>')
+def landing_page_ospf(name, local_ips, all_ips):
+    return render_template("logejecutionOspf.html", name=name, local_ips=local_ips, all_ips=all_ips)
 
 if __name__ == '__main__':
     app.run(debug=True, use_debugger=True, use_reloader=True, passthrough_errors=True)

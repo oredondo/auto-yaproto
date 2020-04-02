@@ -19,8 +19,9 @@ function callStyle(theResponse) {
     });
 }
 
-var deploy = false
+var deploy = false;
 var style = callStyle();
+var ips = {};
 
 function callElements(theResponse) {
     return $.ajax({
@@ -344,6 +345,21 @@ $(function () {
             console.log(dict);
             var last_response_len = false;
             $.ajax({
+                url: "/api/getips", // the endpoint
+                type: "PUT", // http method
+                data: JSON.stringify(dict),
+                contentType: "application/json",
+                dataType: 'json',
+                // handle a non-successful response
+                success: function (data) {
+                    // Call this function on success
+                    ips = data;
+                },
+                error: function () {
+                    console.log("EROOR");
+                }
+            });
+            $.ajax({
                 url: "/api/deploy", // the endpoint
                 type: "PUT", // http method
                 data: JSON.stringify(dict),
@@ -440,6 +456,51 @@ $("html, body").animate({ scrollTop: $(document).height() }, 1000);
         });
     });
 
+
+
+    // #####RUN OSPF##########
+    $(document).ready(function () {
+        $("#checkNamesOspf").click(function () {
+            var dict = cy.json();
+             $('#ospfDiv').empty();
+            for (item in dict.elements.nodes) {
+                if (dict.elements.nodes[item].data.color == "grey") {
+                    ospfName = dict.elements.nodes[item].data.id;
+                    $('#ospfDiv').append("<input type='checkbox' id=" + ospfName + " name=" + ospfName + " value=" + ospfName + ">" +
+                        "<label for=" + ospfName + "> " + ospfName + "</label><br>");
+                }
+            };
+        });
+    });
+    $(document).ready(function () {
+        $("#runOspf").click(function () {
+            var dict = cy.json();
+            var selected = [];
+            var last_response_len = false;
+            $('div#ospfDiv input[type=checkbox]').each(function() {
+               if ($(this).is(":checked")) {
+                   selected.push($(this).attr('name'));
+               }
+            });
+            for (item in dict.elements.nodes) {
+                if (dict.elements.nodes[item].data.color == "grey") {
+                    ospfName = dict.elements.nodes[item].data.id;
+                    if ($.inArray( ospfName, selected ) != -1){
+                        var w = window.open('/logospf&'+ospfName+"&"+ips[ospfName]+"&"+ips["all_ips"]);
+                    }else {
+                        $.ajax({
+                            url: "/api/runospf", // the endpoint
+                            type: "PUT", // http method
+                            data: JSON.stringify({name: ospfName,
+                                                        local_ips: ips[ospfName],
+                                                        all_ips: ips["all_ips"]}),
+                            contentType: "application/json"
+                        });
+                    }
+                }
+            }
+        });
+    });
 
     $("#fit").click(function () {
         console.log('cy=', cy);

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ name }}</title>
+</head>
+
+<body style='background-color: #333' >
+<div class="form-group" id="ripDiv">
+</div>
+<div id="endpoint">
+</div>
+</body>
+<script src="../statics/js/jquery.js"></script>
+
+
+<script>
+var last_response_len = false;
+    $.ajax({
+            url: "/api/runospf", // the endpoint
+            type: "PUT", // http method
+            data: JSON.stringify({name: "{{ name }}",
+                                  local_ips: "{{ local_ips }}".split(","),
+                                  all_ips: "{{ all_ips }}".split(",")}),
+            contentType: "application/json",
+            dataType: 'text',
+            xhrFields: {
+                onprogress: function (e) {
+                    var this_response, response = e.currentTarget.response;
+                    if (last_response_len === false) {
+                        this_response = response;
+                        last_response_len = response.length;
+                    } else {
+                        this_response = response.substring(last_response_len);
+                        last_response_len = response.length;
+                    }
+
+                 $('#ripDiv').append( this_response );
+                $("html, body").animate({ scrollTop: $(document).height() }, 1000);
+
+                }
+            }
+        });
+
+</script>
+
+</html>
