@@ -344,6 +344,7 @@ $(function () {
             var dict = cy.json();
             console.log(dict);
             var last_response_len = false;
+            $('#progressTest').html("<p></p>");
             $.ajax({
                 url: "/api/getips", // the endpoint
                 type: "PUT", // http method
@@ -389,6 +390,7 @@ $(function () {
             var dict = cy.json();
             console.log(dict);
             var last_response_len = false;
+            $('#progressTestDestroy').html("<p></p>");
             $.ajax({
                 url: "/api/destroy", // the endpoint
                 type: "PUT", // http method
