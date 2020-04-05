@@ -39,15 +39,16 @@
                                  </a>
                             </li>
                             <li>
-                                <a href="#" data-toggle="modal" data-target="#myModal2">
-                                    Edges
-                                 </a>
-                            </li>
-                            <li>
                                 <a href="#" data-toggle="modal" data-target="#myModal3">
                                     Routers
                                  </a>
                             </li>
+                            <li>
+                                <a href="#" data-toggle="modal" data-target="#myModal2">
+                                    Edges
+                                 </a>
+                            </li>
+
                             <li>
                                 <a href="#" data-toggle="modal" data-target="#myModal4">
                                     Deploy
@@ -66,6 +67,16 @@
                             <li>
                                 <a href="#" id="checkNamesOspf" data-toggle="modal" data-target="#myModal7">
                                     Ospf
+                                 </a>
+                            </li>
+                            <li>
+                                <a href="#" data-toggle="modal" data-target="#myModal8">
+                                    Save
+                                 </a>
+                            </li>
+                            <li>
+                                <a href="#" id="checkJson" data-toggle="modal" data-target="#myModal9">
+                                    Load
                                  </a>
                             </li>
                             <li>
@@ -316,6 +327,68 @@
             </div>
           </div>
 
+
+            <!-- The Modal Save -->
+                  <div class="modal fade" id="myModal8">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                          <h4 class="modal-title">Save</h4>
+                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+
+                        <!-- Modal body -->
+                        <div class="modal-body">
+                                <form>
+                                  <div class="form-group">
+                                      <h5 class="text-center ">Only save the structure not de virtual machine</h5>
+                                    <label for="save">Laboratory Name:</label>
+                                    <input type="text" class="form-control" id="saveText">
+                                  </div>
+                                </form>
+                        </div>
+
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                          <button type="submit" class="btn btn-primary" data-dismiss="modal" id="save">Save</button>
+                          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+
+            <!-- The Modal Load -->
+                  <div class="modal fade" id="myModal9">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                          <h4 class="modal-title">Load</h4>
+                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+
+                        <!-- Modal body -->
+                        <div class="modal-body">
+                                <form>
+                                  <h5 class="text-center ">Check if you want to load some laboratory</h5>
+                                  <div class="form-group" id="loadDiv">
+                                  </div>
+                                </form>
+                        </div>
+
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                          <button type="submit" class="btn btn-primary" data-dismiss="modal" id="load">Load</button>
+                          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
 
 </div>
         <!-- /#page-content-wrapper -->

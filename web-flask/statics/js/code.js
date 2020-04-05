@@ -14,7 +14,7 @@ function callStyle(theResponse) {
             return data;
         },
         error: function () {
-            console.log("EROOR");
+            console.log("ERROR");
         }
     });
 }
@@ -34,7 +34,7 @@ function callElements(theResponse) {
             return data;
         },
         error: function () {
-            console.log("EROOR");
+            console.log("ERROR");
         }
     });
 }
@@ -187,7 +187,7 @@ $(function () {
                     return data;
                 },
                 error: function () {
-                    console.log("EROOR");
+                    console.log("ERROR");
                     console.log(data)
                 }
             });
@@ -216,7 +216,7 @@ $(function () {
                     });
                 },
                 error: function () {
-                    console.log("EROOR");
+                    console.log("ERROR");
                     console.log(data)
                 }
             });
@@ -245,7 +245,7 @@ $(function () {
                     return data;
                 },
                 error: function () {
-                    console.log("EROOR");
+                    console.log("ERROR");
                     console.log(data)
                 }
             });
@@ -274,7 +274,7 @@ $(function () {
                     return data;
                 },
                 error: function () {
-                    console.log("EROOR");
+                    console.log("ERROR");
                     console.log(data)
                 }
             });
@@ -304,7 +304,7 @@ $(function () {
                     });
                 },
                 error: function () {
-                    console.log("EROOR");
+                    console.log("ERROR");
                     console.log(data)
                 }
             });
@@ -331,7 +331,7 @@ $(function () {
                     return data;
                 },
                 error: function () {
-                    console.log("EROOR");
+                    console.log("ERROR");
                     console.log(data)
                 }
             });
@@ -356,7 +356,7 @@ $(function () {
                     ips = data;
                 },
                 error: function () {
-                    console.log("EROOR");
+                    console.log("ERROR");
                 }
             });
             $.ajax({
@@ -501,7 +501,92 @@ $("html, body").animate({ scrollTop: $(document).height() }, 1000);
             }
         });
     });
+    
+    // Save Ajax 
+    $(document).ready(function () {
+        $("#save").click(function () {
+            var name = $('#saveText').val();
+            var dict = cy.json();
+            dict["name"] = name;
+            console.log(dict);
+            $.ajax({
+                url: "/api/save", // the endpoint
+                type: "PUT", // http method
+                data: JSON.stringify(dict),
+                contentType: "application/json",
+                dataType: 'json',
+                // handle a non-successful response
+                success: function (data) {
+                    // Call this function on success
+                    $('#saveText').val("");
+                    return data;
+                },
+                error: function () {
+                    console.log("ERROR");
+                    console.log(data)
+                }
+            });
+        });
+    });
 
+
+     // Load Ajax
+    $(document).ready(function () {
+        $("#checkJson").click(function () {
+             $('#loadDiv').empty();
+             var files = {};
+             $.ajax({
+                url: "/api/load", // the endpoint
+                type: "GET", // http method
+                contentType: "application/json",
+                dataType: 'json',
+                // handle a non-successful response
+                success: function (data) {
+                    // Call this function on success
+                    for (item in data["files"]) {
+                    $('#loadDiv').append("<input type='radio' id=" + data["files"][item] + " name=loadValue value=" + data["files"][item] + "> " +
+                        "<label for=" + data["files"][item] + "> " + data["files"][item] + "</label><br>");
+                    }
+                    console.log(data);
+                },
+                error: function () {
+                    console.log("ERROR");
+                }
+            });
+
+        });
+    });
+    $(document).ready(function () {
+        var name = "";
+        var dict = {};
+        $("#load").click(function () {
+            $('div#loadDiv input[type=radio]').each(function() {
+               if ($(this).is(":checked")) {
+                   name = ($(this).attr('value'));
+                   dict["name"] = name;
+               }
+            });
+
+            $.ajax({
+                url: "/api/load", // the endpoint
+                type: "PUT", // http method
+                data: JSON.stringify(dict),
+                contentType: "application/json",
+                dataType: 'json',
+                // handle a non-successful response
+                success: function (data) {
+                    // Call this function on success
+                    data["container"] = document.getElementById('cy');
+                    cy = window.cy = cytoscape(data);
+                },
+                error: function () {
+                    console.log("ERROR");
+                }
+            });
+        });
+    });
+
+    
     $("#fit").click(function () {
         console.log('cy=', cy);
         cy.fit();

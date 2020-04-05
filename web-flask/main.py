@@ -3,7 +3,7 @@ from flask import render_template
 from flask_restful import Resource, Api, reqparse
 from lib.actions import Style, Elements, Node, Edge, Router
 from lib.deploy import Deploy
-from lib.get_ips import GetIps
+from lib.aux_actions import GetIps, LoadSave
 from flask import stream_with_context, request, Response
 
 app = Flask(__name__, static_folder='statics')
@@ -131,7 +131,9 @@ class ViewGetIps(Resource):
         out = geting.get()
         return out, 200
 
+
 api.add_resource(ViewGetIps, '/api/getips')
+
 
 class ViewDestroy(Resource):
 
@@ -168,13 +170,42 @@ class ViewRunOspf(Resource):
 
 api.add_resource(ViewRunOspf, '/api/runospf')
 
+
+class ViewSave(Resource):
+
+    def put(self):
+        data = LoadSave(request.data).save()
+        return data, 200
+
+
+api.add_resource(ViewSave, '/api/save')
+
+
+class ViewLoad(Resource):
+
+    def get(self):
+        data = LoadSave({}).list_json()
+        return data, 200
+
+    def put(self):
+        data = LoadSave(request.data).load()
+        return data, 200
+
+
+api.add_resource(ViewLoad, '/api/load')
+
+
 @app.route('/logrip<name>')
 def landing_page(name):
     return render_template("logejecution.html", name=name)
 
+
 @app.route('/logospf&<name>&<local_ips>&<all_ips>')
 def landing_page_ospf(name, local_ips, all_ips):
-    return render_template("logejecutionOspf.html", name=name, local_ips=local_ips, all_ips=all_ips)
+    return render_template("logejecutionOspf.html", name=name,
+                           local_ips=local_ips, all_ips=all_ips)
+
 
 if __name__ == '__main__':
-    app.run(debug=True, use_debugger=True, use_reloader=True, passthrough_errors=True)
+    app.run(debug=True, use_debugger=True,
+            use_reloader=True, passthrough_errors=True)
