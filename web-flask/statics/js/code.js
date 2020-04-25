@@ -80,12 +80,6 @@ $(function () {
         minZoom: 0.1,
         maxZoom: 100,
         wheelSensitivity: 0.1,
-
-        // panningEnabled: false,
-        //boxSelectionEnabled: true,
-        //autounselectify: false,
-        //selectionType: 'additive',
-        //autoungrabify: true,
         layout: {
             name: 'dagre'
         },

@@ -1,27 +1,23 @@
 ---
 # tasks file for base
-- name: install nettools
-  yum:
-    name: net-tools
-    state: present
-- name: install traceroute
-  yum:
-    name: traceroute
-    state: present
 - selinux:
     state: disabled
+
 - name: disable and stop chronyd
   service:
     name: chronyd
     enabled: no
     state: stopped
+
 - name: Reboot a machine updates to apply
   reboot:
     reboot_timeout: 600
+
 - name: install the java 1.6 openjdk-devel
   yum:
     name: java-1.6.0-openjdk-devel
     state: present
+
 - name: install epel-release
   yum:
     name: epel-release

@@ -5,6 +5,7 @@
   yum:
     name: wireshark
     state: present
+    
 - name: Put ip_forward 1
   sysctl:
     name: net.ipv4.ip_forward

@@ -1,6 +1,6 @@
-from flask import Flask, request
+from flask import Flask
 from flask import render_template
-from flask_restful import Resource, Api, reqparse
+from flask_restful import Resource, Api
 from lib.actions import Style, Elements, Node, Edge, Router
 from lib.deploy import Deploy
 from lib.aux_actions import GetIps, LoadSave
@@ -8,8 +8,6 @@ from flask import stream_with_context, request, Response
 
 app = Flask(__name__, static_folder='statics')
 api = Api(app)
-parser = reqparse.RequestParser()
-parser.add_argument('hola')
 
 
 class Puertos(object):
@@ -26,7 +24,7 @@ puerto = Puertos()
 
 
 @app.route("/")
-def hello():
+def index():
     return render_template("index.html")
 
 
@@ -57,7 +55,7 @@ class ViewNode(Resource):
     @staticmethod
     def get():
         out = Node().get()
-        return out
+        return out, 200
 
     def put(self):
         data = Node().put(request.json, puerto.get())
