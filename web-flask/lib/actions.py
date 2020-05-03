@@ -58,7 +58,8 @@ class Elements(object):
                     "text": 'router',
                     "type": 'rectangle',
                     "color": "grey",
-                    "port": 4200
+                    "port": 4200,
+                    "port_mosquitto": 4199
                 }
             }, {
                 "data": {
@@ -67,7 +68,8 @@ class Elements(object):
                     "parent": 'net1',
                     "type": "ellipse",
                     "color": "grey",
-                    "port": 4201
+                    "port": 4201,
+                    "port_mosquitto": 4198
                 }
             }, {
                 "data": {
@@ -76,7 +78,8 @@ class Elements(object):
                     "text": 'nodo2',
                     "type": "ellipse",
                     "color": "grey",
-                    "port": 4202
+                    "port": 4202,
+                    "port_mosquitto": 4197
                 }
             }, {
                 "data": {
@@ -85,7 +88,8 @@ class Elements(object):
                     "text": 'nodo3',
                     "type": "ellipse",
                     "color": "grey",
-                    "port": 4203
+                    "port": 4203,
+                    "port_mosquitto": 4196
                 }
             },
                 {
@@ -135,7 +139,7 @@ class Node(object):
     def get(self):
         pass
 
-    def put(self, data, puertos):
+    def put(self, data, puertos, port_mosquitto):
         name = data.get("name")
         net = data.get("net")
         output = []
@@ -158,6 +162,7 @@ class Node(object):
                                                       "type": "rectangle", "color": "#D7D7D7"}})
 
         output.append({"group": 'nodes', "data": {"id": str(name), "text": str(name), "port": puertos,
+                                                  "port_mosquitto": port_mosquitto,
                                                   "type": "ellipse", "color": "grey", "parent": net},
                        "position": {"x": random.random() * 200, "y": random.random() * 200}})
 
@@ -228,10 +233,11 @@ class Router(object):
     def get(self):
         pass
 
-    def put(self, data, puertos):
+    def put(self, data, puertos, port_mosquitto):
         name = data.get("name")
         output = [{"group": 'nodes', "data": {"id": str(name), "text": str(name),
                                               "port": puertos,
+                                              "port_mosquitto": port_mosquitto,
                                               "type": "rectangle", "color": "grey"},
                    "position": {"x": random.random() * 200, "y": random.random() * 200}}]
 

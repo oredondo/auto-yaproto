@@ -58,7 +58,7 @@ class ViewNode(Resource):
         return out, 200
 
     def put(self):
-        data = Node().put(request.json, puerto.get())
+        data = Node().put(request.json, puerto.get(), puerto.get())
         return data, 200
 
     def delete(self):

@@ -28,6 +28,7 @@
     name: shellinabox
     state: present
 
+
 - name: Template con el puerto correspondiente.
   template:
     src: shellinaboxd.j2
@@ -40,6 +41,25 @@
     name: shellinaboxd
     enabled: yes
     state: started
+
+- name: install mosquitto
+  yum:
+    name: mosquitto
+    state: present
+
+
+- name: Change Port mosquitto
+  lineinfile:
+    path: /etc/mosquitto/mosquitto.conf
+    line: port {{ puerto_mosquitto }}
+    create: yes
+
+- name: start mosquitto
+  service:
+    name: mosquitto
+    enabled: yes
+    state: started
+
 
 - name: Creo usuario de consulta "user" contraseña "temporal"
   user:
