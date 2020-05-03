@@ -1,0 +1,157 @@
+Test instanciado
+
+RawsocketNetlink::bind direccion=0 g=64byte[]=[B@961e946
+
+nl_family(antes)=2, nl_pid=0, nl_groups=64
+
+RawsocketNetlink::bind direccion=0 g=0byte[]=[B@65c66812
+
+nl_family=16, nl_pid=0, nl_groups=64
+
+nl_family(antes)=2, nl_pid=0, nl_groups=0
+
+FiltroNotificador: sesionCreada(): notificada a 1
+
+FSMMaquinaEstadosNetlinkCliente::sesionCreada()
+
+FiltroNotificador: sesionCreada(): notificada a 1
+
+FactoriaFSMRIP: sesionCreada()
+
+Apr 29, 2020 5:33:55 PM msti.io.FiltroLog log
+
+INFO: FiltroLog:sesionCreada() Id=1
+
+Apr 29, 2020 5:33:55 PM msti.io.FiltroLog log
+
+INFO: FiltroLog:sesionCreada() Id=3
+
+Apr 29, 2020 5:33:55 PM msti.io.FiltroLog log
+
+INFO: Remoto=null
+
+FiltroNotificador: sesionCreada(): notificada a 1
+
+Sesi?n creada: id=2
+
+a?adido ILecturaListener
+
+Apr 29, 2020 5:33:55 PM msti.io.FiltroLog log
+
+INFO: FiltroLog:sesionCreada() Id=2
+
+AccionReiniciarTemporizadorDifusionPeriodica: execute() Wed Apr 29 17:33:55 UTC 2020
+
+<---- Env??o: 24 octetos. Destino:/224.0.0.9:520
+
+Apr 29, 2020 5:33:55 PM msti.io.FiltroLog log
+
+INFO: FiltroLog:escribir(): -----> MensajePetici???nRIP
+
+LectorDatagrama:run()---> receive() -> 0 24 octetos. Origen:/172.24.1.2
+
+FiltroNotificador: mensajeRecibido() idLectura= 3
+
+FSMRIP: mensajeRecibido() tipo=RIPPeticion
+
+Filtro notificador: mensajeRecibido notificado.
+
+LectorDatagrama:run()---> receive() -> 1 4 octetos. Origen:/172.24.3.252
+
+MensajeRIPRespusta::mezclarDesde: 0 rutas
+
+FiltroNotificador: mensajeRecibido() idLectura= 4
+
+FSMRIP: mensajeRecibido() tipo=RIPRespuesta
+
+Filtro notificador: mensajeRecibido notificado.
+
+LectorDatagrama:run()---> receive() -> 2 4 octetos. Origen:/172.24.3.253
+
+MensajeRIPRespusta::mezclarDesde: 0 rutas
+
+FiltroNotificador: mensajeRecibido() idLectura= 5
+
+FSMRIP: mensajeRecibido() tipo=RIPRespuesta
+
+Filtro notificador: mensajeRecibido notificado.
+
+LectorDatagrama:run()---> receive() -> 3 4 octetos. Origen:/172.24.1.253
+
+MensajeRIPRespusta::mezclarDesde: 0 rutas
+
+FiltroNotificador: mensajeRecibido() idLectura= 6
+
+FSMRIP: mensajeRecibido() tipo=RIPRespuesta
+
+Filtro notificador: mensajeRecibido notificado.
+
+Apr 29, 2020 5:33:55 PM msti.io.FiltroLog log
+
+INFO: FiltroLog:mensajeRecibido(): -----> MensajePetici???nRIPRuta RIP ----------AFI=0Etiq=0IP=/0.0.0.0Mask=\32Next=/0.0.0.0Metr=16
+
+Apr 29, 2020 5:33:55 PM msti.io.FiltroLog log
+
+INFO: FiltroLog:mensajeRecibido(): <----- MensajeRespuestaRIP
+
+Apr 29, 2020 5:33:55 PM msti.io.FiltroLog log
+
+INFO: FiltroLog:mensajeRecibido(): <----- MensajeRespuestaRIP
+
+Apr 29, 2020 5:33:55 PM msti.io.FiltroLog log
+
+INFO: FiltroLog:mensajeRecibido(): <----- MensajeRespuestaRIP
+
+EstadoRIPTemporizadorTUInactivo:eventoPeticion
+
+FSMRIP:AccionEnviarRutasSolicitadasAUno(): esTablaCompleta!!
+
+FSMRIP:AccionEnviarRutasSolicitadasAUno(): rellena respuesta con 0 rutas.
+
+FSMRIP: Transici??n: TEMPORIZADOR_TRIGGEREDUPDATE_INACTIVO(PETICION)->TEMPORIZADOR_TRIGGEREDUPDATE_INACTIVO
+
+EstadoRIPTemporizadorTUInactivo:eventoRespuesta
+
+msti.rip.fsm.FSMAccionGenerarEventosUpdateRutaIndividual: execute() genera 0 eventos (no contiene rutas).FSMRIP: Transici??n: TEMPORIZADOR_TRIGGEREDUPDATE_INACTIVO(RESPUESTA)->TEMPORIZADOR_TRIGGEREDUPDATE_INACTIVO
+
+EstadoRIPTemporizadorTUInactivo:eventoRespuesta
+
+msti.rip.fsm.FSMAccionGenerarEventosUpdateRutaIndividual: execute() genera 0 eventos (no contiene rutas).FSMRIP: Transici??n: TEMPORIZADOR_TRIGGEREDUPDATE_INACTIVO(RESPUESTA)->TEMPORIZADOR_TRIGGEREDUPDATE_INACTIVO
+
+EstadoRIPTemporizadorTUInactivo:eventoRespuesta
+
+msti.rip.fsm.FSMAccionGenerarEventosUpdateRutaIndividual: execute() genera 0 eventos (no contiene rutas).FSMRIP: Transici??n: TEMPORIZADOR_TRIGGEREDUPDATE_INACTIVO(RESPUESTA)->TEMPORIZADOR_TRIGGEREDUPDATE_INACTIVO
+
+<---- Env??o: 4 octetos. Destino:/172.24.1.2:520
+
+Apr 29, 2020 5:33:55 PM msti.io.FiltroLog log
+
+INFO: FiltroLog:escribir(): <----- MensajeRespuestaRIP
+
+LectorDatagrama:run()---> receive() -> 4 4 octetos. Origen:/172.24.1.2
+
+MensajeRIPRespusta::mezclarDesde: 0 rutas
+
+FiltroNotificador: mensajeRecibido() idLectura= 7
+
+FSMRIP: mensajeRecibido() tipo=RIPRespuesta
+
+Filtro notificador: mensajeRecibido notificado.
+
+Apr 29, 2020 5:33:55 PM msti.io.FiltroLog log
+
+INFO: FiltroLog:mensajeRecibido(): <----- MensajeRespuestaRIP
+
+EstadoRIPTemporizadorTUInactivo:eventoRespuesta
+
+msti.rip.fsm.FSMAccionGenerarEventosUpdateRutaIndividual: execute() genera 0 eventos (no contiene rutas).FSMRIP: Transici??n: TEMPORIZADOR_TRIGGEREDUPDATE_INACTIVO(RESPUESTA)->TEMPORIZADOR_TRIGGEREDUPDATE_INACTIVO
+
+TimerEventProducer: id=TemporizadorDifusionPeriodica expira.
+
+FSMRIP::expiredTimer():TemporizadorDifusionPeriodica Wed Apr 29 17:34:25 UTC 2020
+
+AccionEnviarTablaCompletaATodos: no existen rutas.
+
+AccionReiniciarTemporizadorDifusionPeriodica: execute() Wed Apr 29 17:34:25 UTC 2020
+
+FSMRIP: Transici??n: TEMPORIZADOR_TRIGGEREDUPDATE_INACTIVO(TEMPORIZADORDIFUSIONPERIODICA)->TEMPORIZADOR_TRIGGEREDUPDATE_INACTIVO
