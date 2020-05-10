@@ -42,27 +42,54 @@ Vagrant.configure("2") do |config|
     
   end
   
+  config.vm.define "nodo2" do |nodo2|
+    
+        
+            nodo2.vm.network :forwarded_port, guest: 4206, host: 4206
+            nodo2.vm.network :forwarded_port, guest: 4207, host: 4207
+        
+        nodo2.vm.network "private_network", ip: "172.24.5.253", virtualbox__intnet: true
+    
+  end
+  
 
   
   config.vm.define "router" do |router|
     
-        
-            router.vm.network :forwarded_port, guest: 4200, host: 4200
-            router.vm.network :forwarded_port, guest: 4199, host: 4199
         
         router.vm.network "private_network", ip: "172.24.1.2", virtualbox__intnet: true
     
         
         router.vm.network "private_network", ip: "172.24.3.2", virtualbox__intnet: true
     
+        
+            router.vm.network :forwarded_port, guest: 4200, host: 4200
+            router.vm.network :forwarded_port, guest: 4199, host: 4199
+        
+        router.vm.network "private_network", ip: "172.24.7.252", virtualbox__intnet: true
     
-        router.vm.provision "ansible" do |ansible|
+    
+  end
+  
+  config.vm.define "router2" do |router2|
+    
+        
+        router2.vm.network "private_network", ip: "172.24.5.2", virtualbox__intnet: true
+    
+        
+            router2.vm.network :forwarded_port, guest: 4204, host: 4204
+            router2.vm.network :forwarded_port, guest: 4205, host: 4205
+        
+        router2.vm.network "private_network", ip: "172.24.7.253", virtualbox__intnet: true
+    
+    
+        router2.vm.provision "ansible" do |ansible|
               ansible.playbook       = "provisioning/playbook.yml"
               ansible.limit          = "all"
               ansible.become = true
               ansible.groups = {
-                "nodes" => ["nodo1","nodo3"],
-                "routers" => ["router"]
+                "nodes" => ["nodo1","nodo3","nodo2"],
+                "routers" => ["router","router2"]
               }
               ansible.host_vars = {
                 
@@ -76,11 +103,21 @@ Vagrant.configure("2") do |config|
                                  "puerto" => "4203",
                                  "puerto_mosquitto" => "4196"},
                 
+                "nodo2" => {"gateway" => "172.24.5.2",
+                                 "ip" => "172.24.5.253",
+                                 "puerto" => "4206",
+                                 "puerto_mosquitto" => "4207"},
                 
-                "router" => {"gateway" => "172.24.1.2",
-                                 "ip" => "172.24.1.2",
+                
+                "router" => {"gateway" => "172.24.7.253",
+                                 "ip" => "172.24.7.252",
                                  "puerto" => "4200",
-                                 "puerto_mosquitto" => "4199"}
+                                 "puerto_mosquitto" => "4199"},
+                
+                "router2" => {"gateway" => "172.24.7.252",
+                                 "ip" => "172.24.7.253",
+                                 "puerto" => "4204",
+                                 "puerto_mosquitto" => "4205"}
                 
 
               }

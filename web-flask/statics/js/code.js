@@ -20,6 +20,7 @@ function callStyle(theResponse) {
 }
 
 var deploy = false;
+var runripvar = false;
 var style = callStyle();
 var ips = {};
 
@@ -428,6 +429,10 @@ $("html, body").animate({ scrollTop: $(document).height() }, 1000);
         $("#runRip").click(function () {
             var dict = cy.json();
             var selected = [];
+            var topic = $('#topic').val();
+            if(topic == ""){
+                topic = "all";
+            }
             var last_response_len = false;
             $('div#ripDiv input[type=checkbox]').each(function() {
                if ($(this).is(":checked")) {
@@ -437,18 +442,22 @@ $("html, body").animate({ scrollTop: $(document).height() }, 1000);
             for (item in dict.elements.nodes) {
                 if (dict.elements.nodes[item].data.color == "grey") {
                     ripName = dict.elements.nodes[item].data.id;
+                    port = dict.elements.nodes[item].data.port_mosquitto;
                     if ($.inArray( ripName, selected ) != -1){
-                        var w = window.open('/logrip'+ripName);
-                    }else {
+                        var w = window.open('/logrip&'+ripName+'&'+port +'&'+topic);
+                    }
+                    if (runripvar == false){
                         $.ajax({
                             url: "/api/runrip", // the endpoint
                             type: "PUT", // http method
-                            data: JSON.stringify({name: ripName}),
+                            data: JSON.stringify({name: ripName,
+                                                        port: port}),
                             contentType: "application/json"
                         });
                     }
                 }
             }
+            runripvar = true
         });
     });
 
