@@ -51,3 +51,19 @@ class LoadSave(object):
     def load(self):
         with open('{}/{}.json'.format(self.dir, self.name)) as json_file:
             return json.load(json_file)
+
+
+class Puertos(object):
+
+    def __init__(self, data):
+        self.ports = []
+        for item in data.get("elements").get("nodes"):
+            if item.get("data").get("color") == "grey":
+                self.ports.append(item.get("data").get("port"))
+                self.ports.append(item.get("data").get("port_mosquitto"))
+        self.ports.sort()
+    def get(self):
+        result = self.ports[-1] + 1
+        self.ports.append(result)
+        self.ports.sort()
+        return result

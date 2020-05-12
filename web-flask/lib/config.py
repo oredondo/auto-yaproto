@@ -38,7 +38,7 @@ class Config(object):
                 nets[edge.get("data").get("target")].append(edge.get("data").get("source"))
                 gateways[edge.get("data").get("target")] = edge.get("data").get("source")
             elif edge.get("data").get("target") not in nets.keys():
-                nets[edge.get("data").get("target") + "_$router$_" + edge.get("data").get("source")] = [
+                nets[edge.get("data").get("target") + "_$connectador$_" + edge.get("data").get("source")] = [
                     edge.get("data").get("target"),
                     edge.get("data").get("source")]
 
@@ -113,23 +113,42 @@ class Config(object):
                         aux["puerto"] = puertos.get(item1)
                         aux["puerto_mosquitto"] = puertos_mosquitto.get(item1)
                         aux["gateway"] = red_aux.get(net).get("gateway")
-
             for item1 in config.get("routers"):
                 for aux in config.get("routers").get(item1):
                     if aux.get("net") == net and net not in gateways.keys():
-                        lista = net.split("_$router$_")
+                        lista = net.split("_$connectador$_")
                         lista.remove(item1)
+                        asigno_gateway = False
+                        for i in config.get("routers").get(item1):
+                            if i.get("gateway") != "":
+                                asigno_gateway = True
                         for i in config.get("routers").get(lista[0]):
-                            if i.get("net") == net:
+                            if i.get("net") == net and not asigno_gateway:
                                 aux["gateway"] = i.get("ip")
                                 aux["puerto"] = puertos.get(item1)
                                 aux["puerto_mosquitto"] = puertos_mosquitto.get(item1)
+                                asigno_gateway = True
 
         for item2 in config.get("routers"):
             notienegateway = True
+            redes = []
             for valor in config.get("routers").get(item2):
                 if valor.get("gateway") != "":
                     notienegateway = False
+                if valor.get("net").find("$connectador$") != -1:
+                    redes.append(valor.get("net").replace(item2, "").replace("_$connectador$_", ""))
+            if len(redes) == len(config.get("routers").get(item2)):
+                config.get("routers").get(item2)[0]["gateway"] = config.get("routers").get(item2)[0]["ip"]
+                config.get("routers").get(item2)[0]["puerto"] = puertos.get(item2)
+                config.get("routers").get(item2)[0]["puerto_mosquitto"] = puertos_mosquitto.get(item2)
+                for router in redes:
+                    for otra in config.get("routers").get(router):
+                        if otra["gateway"] != "":
+                            for red in config.get("routers").get(item2):
+                                if red["net"].find(router) != -1 and red["net"].find("_$connectador$_") != -1:
+                                    otra["gateway"] = red["ip"]
+
+
             if notienegateway:
                 config.get("routers").get(item2)[0]["gateway"] = config.get("routers").get(item2)[0]["ip"]
                 config.get("routers").get(item2)[0]["puerto"] = puertos.get(item2)
@@ -142,6 +161,6 @@ class Config(object):
 
         :return:
         """
-        ip = IPNetwork('172.24.0.0/20')
+        ip = IPNetwork('172.24.0.0/19')
         subnets = list(ip.subnet(24))
         return subnets

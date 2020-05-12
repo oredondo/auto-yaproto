@@ -591,6 +591,47 @@ $("html, body").animate({ scrollTop: $(document).height() }, 1000);
         });
     });
 
+
+
+    //////////  Info network ajaxs
+    $(document).ready(function () {
+        $("#infoNet").click(function () {
+            var dict = cy.json();
+            $('#infoDiv').empty();
+            $.ajax({
+                url: "/api/infonet", // the endpoint
+                type: "PUT", // http method
+                data: JSON.stringify(dict),
+                contentType: "application/json",
+                dataType: 'json',
+                // handle a non-successful response
+                success: function (data) {
+                    // Call this function on success
+                    jQuery.each(data["nodes"], function (key, value) {
+                        $('#infoDiv').append("<p><strong>"+ key + "<strong></p>")
+                        $('#infoDiv').append("<p>Net: " + value[0]["net"] + "</p>")
+                        $('#infoDiv').append("<p>Ip: " + value[0]["ip"] + "</p>")
+                        $('#infoDiv').append("<p>Gateway: " + value[0]["gateway"] + "</p>")
+                        $('#infoDiv').append("<p></p>")
+                    });
+                    jQuery.each(data["routers"], function (key, value) {
+                        $('#infoDiv').append("<p><strong>"+ key + "<strong></p>")
+                        jQuery.each(value, function (key2, value2) {
+                            $('#infoDiv').append("<p>Net: " + value2["net"] + "</p>")
+                            $('#infoDiv').append("<p>Ip: " + value2["ip"] + "</p>")
+                            if (value2["gateway"]) {
+                                $('#infoDiv').append("<p>Gateway: " + value2["gateway"] + "</p>")
+                            }
+                            $('#infoDiv').append("<p></p>")
+                        });
+                    });
+                },
+                error: function () {
+                    console.log("ERROR");
+                }
+            });
+        });
+    });
     
     $("#fit").click(function () {
         console.log('cy=', cy);

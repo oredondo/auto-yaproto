@@ -3,27 +3,15 @@ from flask import render_template
 from flask_restful import Resource, Api
 from lib.actions import Style, Elements, Node, Edge, Router
 from lib.deploy import Deploy
-from lib.aux_actions import GetIps, LoadSave
+from lib.aux_actions import GetIps, LoadSave, Puertos
 from flask import stream_with_context, request, Response
 from lib.mqttclient import MqttClient, StreamMqtt
+from lib.config import Config
 import queue
 import json
 
 app = Flask(__name__, static_folder='statics')
 api = Api(app)
-
-
-class Puertos(object):
-
-    def __init__(self):
-        self.port = 4203
-
-    def get(self):
-        self.port = self.port + 1
-        return self.port
-
-
-puerto = Puertos()
 
 
 @app.route("/")
@@ -61,6 +49,7 @@ class ViewNode(Resource):
         return out, 200
 
     def put(self):
+        puerto = Puertos(request.json)
         data = Node().put(request.json, puerto.get(), puerto.get())
         return data, 200
 
@@ -94,6 +83,7 @@ class ViewRouter(Resource):
         return out
 
     def put(self):
+        puerto = Puertos(request.json)
         data = Router().put(request.json, puerto.get(), puerto.get())
         return data, 200
 
@@ -207,6 +197,17 @@ class ViewLoad(Resource):
 
 
 api.add_resource(ViewLoad, '/api/load')
+
+class ViewInfoNet(Resource):
+
+
+    def put(self):
+        data = json.loads(request.data)
+        conf = Config(data=data).get()
+        return conf, 200
+
+
+api.add_resource(ViewInfoNet, '/api/infonet')
 
 
 @app.route('/logrip&<name>&<port>&<topic>')
