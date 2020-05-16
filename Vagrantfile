@@ -42,54 +42,81 @@ Vagrant.configure("2") do |config|
     
   end
   
-  config.vm.define "nodo2" do |nodo2|
+  config.vm.define "nodo22" do |nodo22|
     
         
-            nodo2.vm.network :forwarded_port, guest: 4206, host: 4206
-            nodo2.vm.network :forwarded_port, guest: 4207, host: 4207
+            nodo22.vm.network :forwarded_port, guest: 4214, host: 4214
+            nodo22.vm.network :forwarded_port, guest: 4215, host: 4215
         
-        nodo2.vm.network "private_network", ip: "172.24.5.253", virtualbox__intnet: true
+        nodo22.vm.network "private_network", ip: "172.24.5.253", virtualbox__intnet: true
+    
+  end
+  
+  config.vm.define "nodo12" do |nodo12|
+    
+        
+            nodo12.vm.network :forwarded_port, guest: 4216, host: 4216
+            nodo12.vm.network :forwarded_port, guest: 4217, host: 4217
+        
+        nodo12.vm.network "private_network", ip: "172.24.7.253", virtualbox__intnet: true
     
   end
   
 
   
-  config.vm.define "router" do |router|
+  config.vm.define "r2" do |r2|
     
         
-        router.vm.network "private_network", ip: "172.24.1.2", virtualbox__intnet: true
+        r2.vm.network "private_network", ip: "172.24.1.2", virtualbox__intnet: true
     
         
-        router.vm.network "private_network", ip: "172.24.3.2", virtualbox__intnet: true
+        r2.vm.network "private_network", ip: "172.24.3.2", virtualbox__intnet: true
     
         
-            router.vm.network :forwarded_port, guest: 4200, host: 4200
-            router.vm.network :forwarded_port, guest: 4199, host: 4199
+            r2.vm.network :forwarded_port, guest: 4210, host: 4210
+            r2.vm.network :forwarded_port, guest: 4211, host: 4211
         
-        router.vm.network "private_network", ip: "172.24.7.252", virtualbox__intnet: true
+        r2.vm.network "private_network", ip: "172.24.9.252", virtualbox__intnet: true
     
     
   end
   
-  config.vm.define "router2" do |router2|
+  config.vm.define "r3" do |r3|
     
         
-        router2.vm.network "private_network", ip: "172.24.5.2", virtualbox__intnet: true
+        r3.vm.network "private_network", ip: "172.24.5.2", virtualbox__intnet: true
     
         
-            router2.vm.network :forwarded_port, guest: 4204, host: 4204
-            router2.vm.network :forwarded_port, guest: 4205, host: 4205
+            r3.vm.network :forwarded_port, guest: 4212, host: 4212
+            r3.vm.network :forwarded_port, guest: 4213, host: 4213
         
-        router2.vm.network "private_network", ip: "172.24.7.253", virtualbox__intnet: true
+        r3.vm.network "private_network", ip: "172.24.11.252", virtualbox__intnet: true
     
     
-        router2.vm.provision "ansible" do |ansible|
+  end
+  
+  config.vm.define "r1" do |r1|
+    
+        
+        r1.vm.network "private_network", ip: "172.24.7.2", virtualbox__intnet: true
+    
+        
+            r1.vm.network :forwarded_port, guest: 4204, host: 4204
+            r1.vm.network :forwarded_port, guest: 4205, host: 4205
+        
+        r1.vm.network "private_network", ip: "172.24.9.253", virtualbox__intnet: true
+    
+        
+        r1.vm.network "private_network", ip: "172.24.11.253", virtualbox__intnet: true
+    
+    
+        r1.vm.provision "ansible" do |ansible|
               ansible.playbook       = "provisioning/playbook.yml"
               ansible.limit          = "all"
               ansible.become = true
               ansible.groups = {
-                "nodes" => ["nodo1","nodo3","nodo2"],
-                "routers" => ["router","router2"]
+                "nodes" => ["nodo1","nodo3","nodo22","nodo12"],
+                "routers" => ["r2","r3","r1"]
               }
               ansible.host_vars = {
                 
@@ -103,21 +130,33 @@ Vagrant.configure("2") do |config|
                                  "puerto" => "4203",
                                  "puerto_mosquitto" => "4196"},
                 
-                "nodo2" => {"gateway" => "172.24.5.2",
+                "nodo22" => {"gateway" => "172.24.5.2",
                                  "ip" => "172.24.5.253",
-                                 "puerto" => "4206",
-                                 "puerto_mosquitto" => "4207"},
+                                 "puerto" => "4214",
+                                 "puerto_mosquitto" => "4215"},
                 
-                
-                "router" => {"gateway" => "172.24.7.253",
-                                 "ip" => "172.24.7.252",
-                                 "puerto" => "4200",
-                                 "puerto_mosquitto" => "4199"},
-                
-                "router2" => {"gateway" => "172.24.7.252",
+                "nodo12" => {"gateway" => "172.24.7.2",
                                  "ip" => "172.24.7.253",
+                                 "puerto" => "4216",
+                                 "puerto_mosquitto" => "4217"},
+                
+                
+                "r2" => {"gateway" => "172.24.9.253",
+                                 "ip" => "172.24.9.252",
+                                 "puerto" => "4210",
+                                 "puerto_mosquitto" => "4211"},
+                
+                "r3" => {"gateway" => "172.24.11.253",
+                                 "ip" => "172.24.11.252",
+                                 "puerto" => "4212",
+                                 "puerto_mosquitto" => "4213"},
+                
+                "r1" => {"gateway" => "172.24.9.252",
+                                 "ip" => "172.24.9.253",
                                  "puerto" => "4204",
-                                 "puerto_mosquitto" => "4205"}
+                                 "puerto_mosquitto" => "4205",
+                                 "gateway_2" => "172.24.11.252",
+                                 "net_destino" => "172.24.5.0"}
                 
 
               }

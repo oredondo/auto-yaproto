@@ -13,7 +13,8 @@ class MqttClient(object):
         thread.start()
 
     def on_message(self, mosq, obj, msg):
-        self.lista.put(str("<p style='color:#f8f9ff'; >" + str(msg.topic) + " " + str(msg.payload.decode("utf-8")) + "</p>"))
+        self.lista.put("<p style='color:#f8f9ff'; >{} {}</p>".format(
+            str(msg.topic), str(msg.payload.decode("utf-8"))))
 
     def run(self):
         self.mqttc = mqtt.Client()
@@ -29,4 +30,5 @@ class StreamMqtt(object):
         def generate(lista):
             for job in iter(lista.get, None):
                 yield job
+
         return generate(lista)

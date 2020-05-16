@@ -28,7 +28,6 @@
     name: shellinabox
     state: present
 
-
 - name: Template con el puerto correspondiente.
   template:
     src: shellinaboxd.j2
@@ -47,7 +46,6 @@
     name: mosquitto
     state: present
 
-
 - name: Change Port mosquitto
   lineinfile:
     path: /etc/mosquitto/mosquitto.conf
@@ -59,7 +57,6 @@
     name: mosquitto
     enabled: yes
     state: started
-
 
 - name: Creo usuario de consulta "user" contraseña "temporal"
   user:

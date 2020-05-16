@@ -1,5 +1,5 @@
 from netaddr import IPNetwork
-
+import ipaddress
 
 class Config(object):
 
@@ -70,6 +70,8 @@ class Config(object):
                             red_aux[value]["ips"].append("%s" % i)
                         elif cont == 2:
                             red_aux[value]["gateway"] = str(i)
+                        elif cont == 0:
+                            red_aux[value]["netmask"] = str(i)
                         cont = cont + 1
 
         # genera dicionario de configuracion con nodos y routers con sus ips
@@ -147,12 +149,29 @@ class Config(object):
                             for red in config.get("routers").get(item2):
                                 if red["net"].find(router) != -1 and red["net"].find("_$connectador$_") != -1:
                                     otra["gateway"] = red["ip"]
-
-
             if notienegateway:
                 config.get("routers").get(item2)[0]["gateway"] = config.get("routers").get(item2)[0]["ip"]
                 config.get("routers").get(item2)[0]["puerto"] = puertos.get(item2)
                 config.get("routers").get(item2)[0]["puerto_mosquitto"] = puertos_mosquitto.get(item2)
+
+        ### Agrego rutas para los nodos que se podrian quedar aislados.
+        for item2 in config.get("routers"):
+            cont = 0
+            for eth in config.get("routers").get(item2):
+                if eth.get("gateway") == "" and eth.get("net").find("$connectador$") != -1:
+                    agregar = eth.get("net").replace(item2, "").replace("_$connectador$_", "")
+                    nets_destino = []
+                    ip_gateway = None
+                    for v in config.get("routers").get(agregar):
+                        if v.get("net") == eth.get("net"):
+                            ip_gateway = v.get("ip")
+                        if v.get("net").find("$connectador$") == -1:
+                            nets_destino.append(red_aux.get(v.get("net")).get("netmask"))
+                    if ip_gateway:
+                        eth["gateway"] = ip_gateway
+                        eth["nets_destino"] = nets_destino
+                cont = cont + 1
+
         return config
 
 
