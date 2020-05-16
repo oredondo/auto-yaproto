@@ -67,3 +67,5 @@ _Ahora podremos entrar en la web atraves del siguiente enlace_
 ```
 http://127.0.0.1:5000
 ```
+
+**[Tutorial de uso](https://github.com/oredondo/auto-yaproto/wiki/Tutorial)**
