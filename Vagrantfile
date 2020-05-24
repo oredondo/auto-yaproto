@@ -26,6 +26,7 @@ Vagrant.configure("2") do |config|
     
         
             nodo1.vm.network :forwarded_port, guest: 4201, host: 4201
+            nodo1.vm.network :forwarded_port, guest: 4198, host: 4198
         
         nodo1.vm.network "private_network", ip: "172.24.1.253", virtualbox__intnet: true
     
@@ -35,6 +36,7 @@ Vagrant.configure("2") do |config|
     
         
             nodo2.vm.network :forwarded_port, guest: 4202, host: 4202
+            nodo2.vm.network :forwarded_port, guest: 4197, host: 4197
         
         nodo2.vm.network "private_network", ip: "172.24.3.253", virtualbox__intnet: true
     
@@ -44,6 +46,7 @@ Vagrant.configure("2") do |config|
     
         
             nodo3.vm.network :forwarded_port, guest: 4203, host: 4203
+            nodo3.vm.network :forwarded_port, guest: 4196, host: 4196
         
         nodo3.vm.network "private_network", ip: "172.24.3.252", virtualbox__intnet: true
     
@@ -55,6 +58,7 @@ Vagrant.configure("2") do |config|
     
         
             router.vm.network :forwarded_port, guest: 4200, host: 4200
+            router.vm.network :forwarded_port, guest: 4199, host: 4199
         
         router.vm.network "private_network", ip: "172.24.1.2", virtualbox__intnet: true
     
@@ -74,20 +78,24 @@ Vagrant.configure("2") do |config|
                 
                 "nodo1" => {"gateway" => "172.24.1.2",
                                  "ip" => "172.24.1.253",
-                                 "puerto" => "4201"},
+                                 "puerto" => "4201",
+                                 "puerto_mosquitto" => "4198"},
                 
                 "nodo2" => {"gateway" => "172.24.3.2",
                                  "ip" => "172.24.3.253",
-                                 "puerto" => "4202"},
+                                 "puerto" => "4202",
+                                 "puerto_mosquitto" => "4197"},
                 
                 "nodo3" => {"gateway" => "172.24.3.2",
                                  "ip" => "172.24.3.252",
-                                 "puerto" => "4203"},
+                                 "puerto" => "4203",
+                                 "puerto_mosquitto" => "4196"},
                 
                 
                 "router" => {"gateway" => "172.24.1.2",
                                  "ip" => "172.24.1.2",
-                                 "puerto" => "4200"}
+                                 "puerto" => "4200",
+                                 "puerto_mosquitto" => "4199"}
                 
 
               }

@@ -20,6 +20,7 @@ function callStyle(theResponse) {
 }
 
 var deploy = false;
+var runripvar = false;
 var style = callStyle();
 var ips = {};
 
@@ -428,6 +429,10 @@ $("html, body").animate({ scrollTop: $(document).height() }, 1000);
         $("#runRip").click(function () {
             var dict = cy.json();
             var selected = [];
+            var topic = $('#topic').val();
+            if(topic == ""){
+                topic = "all";
+            }
             var last_response_len = false;
             $('div#ripDiv input[type=checkbox]').each(function() {
                if ($(this).is(":checked")) {
@@ -437,18 +442,22 @@ $("html, body").animate({ scrollTop: $(document).height() }, 1000);
             for (item in dict.elements.nodes) {
                 if (dict.elements.nodes[item].data.color == "grey") {
                     ripName = dict.elements.nodes[item].data.id;
+                    port = dict.elements.nodes[item].data.port_mosquitto;
                     if ($.inArray( ripName, selected ) != -1){
-                        var w = window.open('/logrip'+ripName);
-                    }else {
+                        var w = window.open('/logrip&'+ripName+'&'+port +'&'+topic);
+                    }
+                    if (runripvar == false){
                         $.ajax({
                             url: "/api/runrip", // the endpoint
                             type: "PUT", // http method
-                            data: JSON.stringify({name: ripName}),
+                            data: JSON.stringify({name: ripName,
+                                                        port: port}),
                             contentType: "application/json"
                         });
                     }
                 }
             }
+            runripvar = true
         });
     });
 
@@ -582,6 +591,47 @@ $("html, body").animate({ scrollTop: $(document).height() }, 1000);
         });
     });
 
+
+
+    //////////  Info network ajaxs
+    $(document).ready(function () {
+        $("#infoNet").click(function () {
+            var dict = cy.json();
+            $('#infoDiv').empty();
+            $.ajax({
+                url: "/api/infonet", // the endpoint
+                type: "PUT", // http method
+                data: JSON.stringify(dict),
+                contentType: "application/json",
+                dataType: 'json',
+                // handle a non-successful response
+                success: function (data) {
+                    // Call this function on success
+                    jQuery.each(data["nodes"], function (key, value) {
+                        $('#infoDiv').append("<p><strong>"+ key + "<strong></p>")
+                        $('#infoDiv').append("<p>Net: " + value[0]["net"] + "</p>")
+                        $('#infoDiv').append("<p>Ip: " + value[0]["ip"] + "</p>")
+                        $('#infoDiv').append("<p>Gateway: " + value[0]["gateway"] + "</p>")
+                        $('#infoDiv').append("<p></p>")
+                    });
+                    jQuery.each(data["routers"], function (key, value) {
+                        $('#infoDiv').append("<p><strong>"+ key + "<strong></p>")
+                        jQuery.each(value, function (key2, value2) {
+                            $('#infoDiv').append("<p>Net: " + value2["net"] + "</p>")
+                            $('#infoDiv').append("<p>Ip: " + value2["ip"] + "</p>")
+                            if (value2["gateway"]) {
+                                $('#infoDiv').append("<p>Gateway: " + value2["gateway"] + "</p>")
+                            }
+                            $('#infoDiv').append("<p></p>")
+                        });
+                    });
+                },
+                error: function () {
+                    console.log("ERROR");
+                }
+            });
+        });
+    });
     
     $("#fit").click(function () {
         console.log('cy=', cy);

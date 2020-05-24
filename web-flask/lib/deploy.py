@@ -29,7 +29,9 @@ class Deploy(object):
 
     def run_rip(self):
         name = self.data.get("name")
-        command = "sudo java -Djava.library.path=/vagrant/data/lib -jar /vagrant/data/builds/ProtocoloRIPv2.jar"
+        port = self.data.get("port")
+        command = "sudo java -Djava.library.path=/vagrant/data/lib -jar " \
+                  "/vagrant/data/builds/ProtocoloRIPv2.jar 0.0.0.0:{} &".format(port)
         self.cmd.extend(["ssh", name, "-c", command])
         return self._run_command()
 
@@ -51,5 +53,4 @@ class Deploy(object):
         def generate():
             for item in iter(self.pope.stdout.readline, ""):
                 yield str("<p style='color:#f8f9ff'; >" + item + "</p>")
-
         return generate()
