@@ -32,91 +32,47 @@ Vagrant.configure("2") do |config|
     
   end
   
+  config.vm.define "nodo2" do |nodo2|
+    
+        
+            nodo2.vm.network :forwarded_port, guest: 4202, host: 4202
+            nodo2.vm.network :forwarded_port, guest: 4197, host: 4197
+        
+        nodo2.vm.network "private_network", ip: "172.24.3.253", virtualbox__intnet: true
+    
+  end
+  
   config.vm.define "nodo3" do |nodo3|
     
         
             nodo3.vm.network :forwarded_port, guest: 4203, host: 4203
             nodo3.vm.network :forwarded_port, guest: 4196, host: 4196
         
-        nodo3.vm.network "private_network", ip: "172.24.3.253", virtualbox__intnet: true
-    
-  end
-  
-  config.vm.define "nodo22" do |nodo22|
-    
-        
-            nodo22.vm.network :forwarded_port, guest: 4214, host: 4214
-            nodo22.vm.network :forwarded_port, guest: 4215, host: 4215
-        
-        nodo22.vm.network "private_network", ip: "172.24.5.253", virtualbox__intnet: true
-    
-  end
-  
-  config.vm.define "nodo12" do |nodo12|
-    
-        
-            nodo12.vm.network :forwarded_port, guest: 4216, host: 4216
-            nodo12.vm.network :forwarded_port, guest: 4217, host: 4217
-        
-        nodo12.vm.network "private_network", ip: "172.24.7.253", virtualbox__intnet: true
+        nodo3.vm.network "private_network", ip: "172.24.3.252", virtualbox__intnet: true
     
   end
   
 
   
-  config.vm.define "r2" do |r2|
+  config.vm.define "router" do |router|
     
         
-        r2.vm.network "private_network", ip: "172.24.1.2", virtualbox__intnet: true
+            router.vm.network :forwarded_port, guest: 4200, host: 4200
+            router.vm.network :forwarded_port, guest: 4199, host: 4199
+        
+        router.vm.network "private_network", ip: "172.24.1.2", virtualbox__intnet: true
     
         
-        r2.vm.network "private_network", ip: "172.24.3.2", virtualbox__intnet: true
-    
-        
-            r2.vm.network :forwarded_port, guest: 4210, host: 4210
-            r2.vm.network :forwarded_port, guest: 4211, host: 4211
-        
-        r2.vm.network "private_network", ip: "172.24.9.252", virtualbox__intnet: true
+        router.vm.network "private_network", ip: "172.24.3.2", virtualbox__intnet: true
     
     
-  end
-  
-  config.vm.define "r3" do |r3|
-    
-        
-        r3.vm.network "private_network", ip: "172.24.5.2", virtualbox__intnet: true
-    
-        
-            r3.vm.network :forwarded_port, guest: 4212, host: 4212
-            r3.vm.network :forwarded_port, guest: 4213, host: 4213
-        
-        r3.vm.network "private_network", ip: "172.24.11.252", virtualbox__intnet: true
-    
-    
-  end
-  
-  config.vm.define "r1" do |r1|
-    
-        
-        r1.vm.network "private_network", ip: "172.24.7.2", virtualbox__intnet: true
-    
-        
-            r1.vm.network :forwarded_port, guest: 4204, host: 4204
-            r1.vm.network :forwarded_port, guest: 4205, host: 4205
-        
-        r1.vm.network "private_network", ip: "172.24.9.253", virtualbox__intnet: true
-    
-        
-        r1.vm.network "private_network", ip: "172.24.11.253", virtualbox__intnet: true
-    
-    
-        r1.vm.provision "ansible" do |ansible|
+        router.vm.provision "ansible" do |ansible|
               ansible.playbook       = "provisioning/playbook.yml"
               ansible.limit          = "all"
               ansible.become = true
               ansible.groups = {
-                "nodes" => ["nodo1","nodo3","nodo22","nodo12"],
-                "routers" => ["r2","r3","r1"]
+                "nodes" => ["nodo1","nodo2","nodo3"],
+                "routers" => ["router"]
               }
               ansible.host_vars = {
                 
@@ -125,38 +81,21 @@ Vagrant.configure("2") do |config|
                                  "puerto" => "4201",
                                  "puerto_mosquitto" => "4198"},
                 
-                "nodo3" => {"gateway" => "172.24.3.2",
+                "nodo2" => {"gateway" => "172.24.3.2",
                                  "ip" => "172.24.3.253",
+                                 "puerto" => "4202",
+                                 "puerto_mosquitto" => "4197"},
+                
+                "nodo3" => {"gateway" => "172.24.3.2",
+                                 "ip" => "172.24.3.252",
                                  "puerto" => "4203",
                                  "puerto_mosquitto" => "4196"},
                 
-                "nodo22" => {"gateway" => "172.24.5.2",
-                                 "ip" => "172.24.5.253",
-                                 "puerto" => "4214",
-                                 "puerto_mosquitto" => "4215"},
                 
-                "nodo12" => {"gateway" => "172.24.7.2",
-                                 "ip" => "172.24.7.253",
-                                 "puerto" => "4216",
-                                 "puerto_mosquitto" => "4217"},
-                
-                
-                "r2" => {"gateway" => "172.24.9.253",
-                                 "ip" => "172.24.9.252",
-                                 "puerto" => "4210",
-                                 "puerto_mosquitto" => "4211"},
-                
-                "r3" => {"gateway" => "172.24.11.253",
-                                 "ip" => "172.24.11.252",
-                                 "puerto" => "4212",
-                                 "puerto_mosquitto" => "4213"},
-                
-                "r1" => {"gateway" => "172.24.9.252",
-                                 "ip" => "172.24.9.253",
-                                 "puerto" => "4204",
-                                 "puerto_mosquitto" => "4205",
-                                 "gateway_2" => "172.24.11.252",
-                                 "net_destino" => "172.24.5.0"}
+                "router" => {"gateway" => "172.24.1.2",
+                                 "ip" => "172.24.1.2",
+                                 "puerto" => "4200",
+                                 "puerto_mosquitto" => "4199"}
                 
 
               }
