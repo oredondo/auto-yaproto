@@ -333,9 +333,28 @@ $(function () {
         });
     });
 
-
+    /// DEPLOY
     $(document).ready(function () {
         $("#deploy").click(function () {
+            cy.nodes().forEach(function( ele ) {
+                    if (ele.data("color") == "grey") {
+                        let node = ele;
+                        let popper = ele.popper({
+                            content: () => {
+                                let div = document.createElement('div');
+                                div.setAttribute("id", "IP" + ele.id());
+                                document.body.appendChild(div);
+                                return div;
+                            }
+                        });
+                        let update = () => {
+                            popper.scheduleUpdate();
+                        };
+                        node.on('position', update);
+                        cy.on('pan zoom resize', update);
+                    }
+            });
+
             var dict = cy.json();
             console.log(dict);
             var last_response_len = false;
@@ -350,6 +369,32 @@ $(function () {
                 success: function (data) {
                     // Call this function on success
                     ips = data;
+                },
+                error: function () {
+                    console.log("ERROR");
+                }
+            });
+            $.ajax({
+                url: "/api/infonet", // the endpoint
+                type: "PUT", // http method
+                data: JSON.stringify(dict),
+                contentType: "application/json",
+                dataType: 'json',
+                // handle a non-successful response
+                success: function (data) {
+                    // Call this function on success
+                    jQuery.each(data["nodes"], function (key, value) {
+                        $('#IP'+ key).append('<p></p>')
+                        $('#IP'+ key).append('<p><span style="color:#0040ff;">'+ 'Ip: ' + value[0]["ip"] + '</span></p>')
+                        $('#IP'+ key).append('<div id="ESTADO'+ key +'"></div>')
+                    });
+                    jQuery.each(data["routers"], function (key, value) {
+                        $('#IP'+ key).append('<p></p>')
+                        jQuery.each(value, function (key2, value2) {
+                            $('#IP'+ key).append('<p><span style="color:#0040ff;">'+ 'Ip: ' + value2["ip"] + '</span></p>')
+                        });
+                        $('#IP'+ key).append('<div id="ESTADO'+ key +'"></div>')
+                    });
                 },
                 error: function () {
                     console.log("ERROR");
@@ -377,6 +422,7 @@ $(function () {
                     }
                 }
             });
+
 
         });
     });
@@ -430,26 +476,24 @@ $("html, body").animate({ scrollTop: $(document).height() }, 1000);
     });
     $(document).ready(function () {
         $("#runRip").click(function () {
-            cy.nodes().forEach(function( ele ) {
-                    console.log(ele.id());
-                    console.log(ele.data("color"));
-                    if (ele.data("color") == "grey") {
-                        let node = ele;
-                        let popper = ele.popper({
-                            content: () => {
-                                let div = document.createElement('div');
-                                div.setAttribute("id", "ESTADO" + ele.id());
-                                document.body.appendChild(div);
-                                return div;
-                            }
-                        });
-                        let update = () => {
-                            popper.scheduleUpdate();
-                        };
-                        node.on('position', update);
-                        cy.on('pan zoom resize', update);
-                    }
-            });
+            // cy.nodes().forEach(function( ele ) {
+            //         if (ele.data("color") == "grey") {
+            //             let node = ele;
+            //             let popper = ele.popper({
+            //                 content: () => {
+            //                     let div = document.createElement('div');
+            //                     div.setAttribute("id", "ESTADO" + ele.id());
+            //                     document.body.appendChild(div);
+            //                     return div;
+            //                 }
+            //             });
+            //             let update = () => {
+            //                 popper.scheduleUpdate();
+            //             };
+            //             node.on('position', update);
+            //             cy.on('pan zoom resize', update);
+            //         }
+            // });
             var dict = cy.json();
             var selected = [];
             var topic = $('#topic').val();
