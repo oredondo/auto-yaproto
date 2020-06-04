@@ -4,17 +4,20 @@ import threading
 
 class MqttClient(object):
 
-    def __init__(self, lista, port, topic):
+    def __init__(self, lista, port, topic, mapa=False):
         self.lista = lista
         self.port = port
         self.topic = topic
+        if mapa:
+            self.color = '#ff0000;'
+        else:
+            self.color = '#f8f9ff;'
         thread = threading.Thread(target=self.run, args=())
         thread.daemon = True
         thread.start()
 
     def on_message(self, mosq, obj, msg):
-        self.lista.put("<p style='color:#f8f9ff'; >{} {}</p>".format(
-            str(msg.topic), str(msg.payload.decode("utf-8"))))
+        self.lista.put('<p><span style="color:'+self.color+'" >{}</span></p>'.format( str(msg.payload.decode("utf-8"))))
 
     def run(self):
         self.mqttc = mqtt.Client()

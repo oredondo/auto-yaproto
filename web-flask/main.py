@@ -154,7 +154,7 @@ class ViewMqttRip(Resource):
         if data.get("topic"):
             cola = queue.Queue()
             aux = StreamMqtt()
-            MqttClient(cola, int(data.get("port")), data.get("topic"))
+            MqttClient(cola, int(data.get("port")), data.get("topic"), data.get("mapa") )
             rows = aux.stream(cola)
             return Response(stream_with_context(rows))
         else:

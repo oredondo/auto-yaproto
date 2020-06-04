@@ -74,7 +74,6 @@ $(function () {
         }
     };
 
-
     var cy = window.cy = cytoscape({
         container: document.getElementById('cy'),
 
@@ -159,6 +158,7 @@ $(function () {
             });
         });
     }
+
 
 
     $(document).ready(function () {
@@ -377,6 +377,7 @@ $(function () {
                     }
                 }
             });
+
         });
     });
 
@@ -411,6 +412,8 @@ $(function () {
     });
 $("html, body").animate({ scrollTop: $(document).height() }, 1000);
 
+
+
 // #####RUN RIP##########
     $(document).ready(function () {
         $("#checkNames").click(function () {
@@ -427,13 +430,32 @@ $("html, body").animate({ scrollTop: $(document).height() }, 1000);
     });
     $(document).ready(function () {
         $("#runRip").click(function () {
+            cy.nodes().forEach(function( ele ) {
+                    console.log(ele.id());
+                    console.log(ele.data("color"));
+                    if (ele.data("color") == "grey") {
+                        let node = ele;
+                        let popper = ele.popper({
+                            content: () => {
+                                let div = document.createElement('div');
+                                div.setAttribute("id", "ESTADO" + ele.id());
+                                document.body.appendChild(div);
+                                return div;
+                            }
+                        });
+                        let update = () => {
+                            popper.scheduleUpdate();
+                        };
+                        node.on('position', update);
+                        cy.on('pan zoom resize', update);
+                    }
+            });
             var dict = cy.json();
             var selected = [];
             var topic = $('#topic').val();
             if(topic == ""){
                 topic = "all";
             }
-            var last_response_len = false;
             $('div#ripDiv input[type=checkbox]').each(function() {
                if ($(this).is(":checked")) {
                    selected.push($(this).attr('name'));
@@ -457,11 +479,55 @@ $("html, body").animate({ scrollTop: $(document).height() }, 1000);
                     }
                 }
             }
+
             runripvar = true
+
+
+            for (item in dict.elements.nodes) {
+                if (dict.elements.nodes[item].data.color == "grey") {
+                    ripName = dict.elements.nodes[item].data.id;
+                    port = dict.elements.nodes[item].data.port_mosquitto;
+                executeAsync(CallEstado(ripName, port));
+
+                }
+            }
+
+
         });
     });
+    function executeAsync(func) {
+        setTimeout(func, 0);
+    }
+    function CallEstado(ripName, port) {
+        var last_response_len = false;
+        $.ajax({
+            url: "/api/mqttrip", // the endpoint
+            type: "PUT", // http method
+            data: JSON.stringify({
+                name: ripName,
+                port: port,
+                mapa: true,
+                topic: "ESTADO"
+            }),
+            contentType: "application/json",
+            dataType: 'text',
+            xhrFields: {
+                onprogress: function (e) {
+                    var this_response, response = e.currentTarget.response;
+                    if (last_response_len === false) {
+                        this_response = response;
+                        last_response_len = response.length;
+                    } else {
+                        this_response = response.substring(last_response_len);
+                        last_response_len = response.length;
+                        $('#ESTADO' + ripName).empty();
+                    }
+                    $('#ESTADO' + ripName).append('<p></p>' + this_response);
 
-
+                }
+            }
+        });
+    }
 
     // #####RUN OSPF##########
     $(document).ready(function () {
